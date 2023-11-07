@@ -5,31 +5,57 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalTime;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.Map;
+import java.util.HashMap;
+
 
 /**
  * This is the main class for the train dispatch application.
+ * This is where a specific set of train departures are initialised alongside an
+ * overview and the GUI.
+ *
+ * @author Håvard Daleng
+ * @version 1.0, 2023-10-16
  */
 
 public class TrainDispatchApp {
   // TODO: Fill in the main method and any other methods you need.
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        // Create some departures
-        TrainDeparture departure1 = new TrainDeparture("A1", 1, "Trondheim", LocalTime.of(12, 0), 1);
-        TrainDeparture departure2 = new TrainDeparture("L2", 2, "Oslo", LocalTime.of(12, 15), 2);
-        TrainDeparture departure3 = new TrainDeparture("R3", 2, "Ålesund", LocalTime.of(12, 30), 3);
-        TrainDeparture departure4 = new TrainDeparture("C2", 2, "Stavanger", LocalTime.of(12, 45), 1);
+    // Create some departures
+    TrainDeparture departure1 = new TrainDeparture("A1", 1, "Trondheim", LocalTime.of(12, 0));
+    TrainDeparture departure2 = new TrainDeparture("L2", 2, "Oslo", LocalTime.of(12, 15), 2);
+    TrainDeparture departure3 = new TrainDeparture("R3", 3, "Ålesund", LocalTime.of(12, 30), 3);
+    TrainDeparture departure4 = new TrainDeparture("C2", 4, "Stavanger", LocalTime.of(12, 45), 1);
+    TrainDeparture departure5 = new TrainDeparture("A2", 5, "Tromsø", LocalTime.of(13, 00), 4);
+    TrainDeparture departure6 = new TrainDeparture("A1", 6, "Trondheim", LocalTime.of(13, 15), 1);
 
-        // Initialise departure overview
-        DepartureOverview overview = new DepartureOverview(departure1, departure2, departure3, departure4);
+    Map<Integer, TrainDeparture> departures = new HashMap<>();
 
-        System.out.println(departure1.getTrainID());
-        System.out.println(departure2.getDestination());
-        System.out.println(overview.getDeparture(2).getLine());
+    /*
+    String[] lineList = {"A1", "L2", "R3", "C2", "A2", "E3", "C3"};
+    int[] trackList = {1, 2, 3, 4, 5};
+    String[] destinationList = {"Trondheim", "Oslo", "Ålesund", "Stavanger", "Tromsø", "Hamar", "Kristiansand"};
 
-        // Create GUI
+    // Train departure generator
+    for (int i = 2; i <= 100; i++) {
+      int randomNum1 = ThreadLocalRandom.current().nextInt(0, 8);
+      int randomNum2 = ThreadLocalRandom.current().nextInt(0, 8);
+      int randomNum3 = ThreadLocalRandom.current().nextInt(0, 6);
+      TrainDeparture newDeparture = new TrainDeparture(lineList[randomNum2], i, destinationList[randomNum1], )
+    }*/
+
+    // Initialise departure overview
+    DepartureOverview overview = new DepartureOverview(departure1, departure2, departure3, departure4, departure5, departure6);
+
+
+    // Create GUI
+    DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview);
+    GUI.start();
 
 
 
-    }
+
+  }
 }
