@@ -28,8 +28,12 @@ public class TrainDispatchApp {
     TrainDeparture departure2 = new TrainDeparture("L2", 2, "Oslo", LocalTime.of(12, 15), 2);
     TrainDeparture departure3 = new TrainDeparture("R3", 3, "Ålesund", LocalTime.of(12, 30), 3);
     TrainDeparture departure4 = new TrainDeparture("C2", 4, "Stavanger", LocalTime.of(12, 45), 1);
-    TrainDeparture departure5 = new TrainDeparture("A2", 5, "Tromsø", LocalTime.of(13, 00), 4);
+    TrainDeparture departure5 = new TrainDeparture("A2", 5, "Tromsø", LocalTime.of(13, 0), 4);
     TrainDeparture departure6 = new TrainDeparture("A1", 6, "Trondheim", LocalTime.of(13, 15), 1);
+    TrainDeparture departure7 = new TrainDeparture("L2", 7, "Oslo", LocalTime.of(13, 30), 2);
+    TrainDeparture departure8 = new TrainDeparture("R3", 8, "Ålesund", LocalTime.of(13, 35), 3);
+    TrainDeparture departure9 = new TrainDeparture("S9", 9, "Stockholm", LocalTime.of(13, 45), 4);
+    TrainDeparture departure10 = new TrainDeparture("A1", 10, "Trondheim", LocalTime.of(14, 0), 1);
 
     Map<Integer, TrainDeparture> departures = new HashMap<>();
 
@@ -47,8 +51,13 @@ public class TrainDispatchApp {
     }*/
 
     // Initialise departure overview
-    DepartureOverview overview = new DepartureOverview(departure1, departure2, departure3, departure4, departure5, departure6);
+    DepartureOverview overview = new DepartureOverview(departure1, departure2, departure3,
+        departure4, departure5, departure6, departure7, departure8
+        , departure9, departure10);
 
+    //LocalTime time = LocalTime.of(14, 0);
+    //overview.removeDeparturesAfter(time);
+    //System.out.println(overview.getDepartures());
 
     // Create GUI
     DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview);

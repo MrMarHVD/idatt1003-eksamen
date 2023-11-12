@@ -7,6 +7,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test class for TrainDeparture.
+ *
+ * @author Håvard Daleng.
+ * @version 1.0, 2023-10-16.
+ */
 class TrainDepartureTest {
 
   private TrainDeparture trainDeparture;

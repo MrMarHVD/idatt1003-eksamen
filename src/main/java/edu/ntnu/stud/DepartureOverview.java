@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.time.LocalTime;
 import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class structures a number of departures into an overview which is used
@@ -44,17 +46,31 @@ public class DepartureOverview {
    *
    * @param departures the initial departures.
    */
-  public DepartureOverview(TrainDeparture... departures) {
-    this.departures = new ArrayList<>(Arrays.asList(departures));
+  public DepartureOverview(TrainDeparture... departures) throws IllegalArgumentException {
+    Set<Integer> uniqueIds = new HashSet<>();
+    ArrayList<TrainDeparture> temp = new ArrayList<>();
+
+    for (TrainDeparture departure : departures) {
+      if (!uniqueIds.add(departure.getTrainID())) {
+
+        throw new IllegalArgumentException("Duplicate train ID found: " + departure.getTrainID());
+      }
+      temp.add(departure);
+    }
+
+    this.departures = temp;
   }
 
   /**
    * Register a new departure and re-sort the list of departures by departure time.
+   * Throws error if departure with same ID already exists.
+   *
+   * @param departure the departure to register.
    */
   public void registerDeparture(TrainDeparture departure) {
     for (TrainDeparture departure1 : this.departures) {
       if (departure.getTrainID() == departure1.getTrainID()) {
-        throw new IllegalArgumentException("The register already contains departure with ID"
+        throw new IllegalArgumentException("The register already contains departure with ID "
             + departure.getTrainID());
       }
     }
@@ -96,6 +112,20 @@ public class DepartureOverview {
       LocalTime newTime2 = o2.getTime().plusMinutes(o2.getDelay());
       return newTime1.compareTo(newTime2);
     });
+  }
+
+  /**
+   * Removes all departures after a certain time
+   * @param time
+   */
+  public void removeDeparturesAfter(LocalTime time) {
+    ArrayList<TrainDeparture> temp = new ArrayList<>();
+    for (TrainDeparture departure : this.departures) {
+      if (departure.getTime().plusMinutes(departure.getDelay()).isBefore(time)) {
+        temp.add(departure);
+      }
+    }
+    this.departures.removeAll(temp);
   }
 
   /**
