@@ -42,6 +42,7 @@ public class DepartureOverviewGUI {
     private JTextField destinationField;
     private JTextField timeField;
     private JTextField idField;
+    private JButton delayButton;
     private JPanel lowerPanel;
     private final DepartureOverview overview;
     private LocalTime currentTime;
@@ -149,7 +150,14 @@ public class DepartureOverviewGUI {
    */
   private void initializeLowerPanel() {
     this.lowerPanel = new JPanel();
-    lowerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+    lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
+
+    // Create sub-panels.
+    JPanel registerPanel = new JPanel();
+    JPanel delayPanel = new JPanel();
+
+    registerPanel.setLayout(new FlowLayout());
+    delayPanel.setLayout(new FlowLayout());
 
     // Create labels for each field.
     JLabel lineLabel = new JLabel("Line:");
@@ -181,12 +189,23 @@ public class DepartureOverviewGUI {
     idPanel.add(idLabel);
     idPanel.add(this.idField);
 
-    // Add the grouped panels to the lowerPanel.
-    this.lowerPanel.add(timePanel);
-    this.lowerPanel.add(linePanel);
-    this.lowerPanel.add(destinationPanel);
-    this.lowerPanel.add(idPanel);
-    this.lowerPanel.add(this.registerButton);
+    registerPanel.add(timePanel);;
+    registerPanel.add(linePanel);
+    registerPanel.add(destinationPanel);
+    registerPanel.add(idPanel);
+    registerPanel.add(this.registerButton);
+
+    // Add delay components to delayPanel.
+    JLabel delayLabel = new JLabel("Delay:");
+    this.delayButton = new JButton("Set delay");
+    JTextField delayField = new JTextField(5);
+    delayPanel.add(delayLabel);
+    delayPanel.add(delayField);
+    delayPanel.add(delayButton);
+
+    // Add the two sub-panels to the main panel.
+    this.lowerPanel.add(registerPanel);
+    this.lowerPanel.add(delayPanel);
 
     // Set padding around the lowerPanel.
     lowerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));

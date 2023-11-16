@@ -63,8 +63,5 @@ public class TrainDispatchApp {
     DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview);
     GUI.start();
 
-
-
-
   }
 }

@@ -46,7 +46,6 @@ class TrainDepartureTest {
   void shouldAddDelay() {
     trainDeparture.addDelay(5);
     Assertions.assertEquals(5, trainDeparture.getDelay());
-
   }
 
   /**
