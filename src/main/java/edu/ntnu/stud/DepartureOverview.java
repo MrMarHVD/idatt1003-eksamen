@@ -115,11 +115,13 @@ public class DepartureOverview {
   }
 
   /**
-   * Removes all departures after a certain time
-   * @param time
+   * Removes all departures after a certain time.
+   *
+   * @param time the time after which all departures will be removed.
    */
   public void removeDeparturesAfter(LocalTime time) {
     ArrayList<TrainDeparture> temp = new ArrayList<>();
+
     for (TrainDeparture departure : this.departures) {
       if (departure.getTime().plusMinutes(departure.getDelay()).isBefore(time)) {
         temp.add(departure);

@@ -43,6 +43,7 @@ public class DepartureOverviewGUI {
     private JTextField timeField;
     private JTextField idField;
     private JButton delayButton;
+    private JTextField delayField;
     private JPanel lowerPanel;
     private final DepartureOverview overview;
     private LocalTime currentTime;
@@ -74,6 +75,8 @@ public class DepartureOverviewGUI {
 
       this.setupRegisterActionListener();
 
+      this.setupDelayActionListener();
+
       this.initializeScrollPane();
   }
 
@@ -102,7 +105,7 @@ public class DepartureOverviewGUI {
       String[] columnLabels = {"Departure time", "Line", "ID", "Destination", "Delay", "Track"};
 
       this.tableModel = new DefaultTableModel(columnLabels, 0);
-      table = new JTable(tableModel);
+      this.table = new JTable(tableModel);
   }
 
   /**
@@ -118,7 +121,7 @@ public class DepartureOverviewGUI {
 
     // Create a sub-panel for search components.
     JPanel searchPanel = new JPanel();
-    searchPanel.add(new JLabel("Train ID"));
+    searchPanel.add(new JLabel("Train ID/Destination"));
     searchPanel.add(searchField);
     searchPanel.add(searchButton);
 
@@ -146,7 +149,8 @@ public class DepartureOverviewGUI {
   }
 
   /**
-   * Initialises the lower panel, allowing the user to register new departures.
+   * Initialises the lower panel, allowing the user to register new departures
+   * as well as add delay to a single departure.
    */
   private void initializeLowerPanel() {
     this.lowerPanel = new JPanel();
@@ -189,6 +193,7 @@ public class DepartureOverviewGUI {
     idPanel.add(idLabel);
     idPanel.add(this.idField);
 
+    // Add register components to registerPanel.
     registerPanel.add(timePanel);;
     registerPanel.add(linePanel);
     registerPanel.add(destinationPanel);
@@ -198,9 +203,9 @@ public class DepartureOverviewGUI {
     // Add delay components to delayPanel.
     JLabel delayLabel = new JLabel("Delay:");
     this.delayButton = new JButton("Set delay");
-    JTextField delayField = new JTextField(5);
+    this.delayField = new JTextField(5);
     delayPanel.add(delayLabel);
-    delayPanel.add(delayField);
+    delayPanel.add(this.delayField);
     delayPanel.add(delayButton);
 
     // Add the two sub-panels to the main panel.
@@ -216,7 +221,7 @@ public class DepartureOverviewGUI {
 
 
   /**
-   * Initialises the scroll panel, allowing the user to scroll through departures.
+   * Initialises the scroll pane, allowing the user to scroll through departures.
    */
   private void initializeScrollPane() {
       JScrollPane scrollPane = new JScrollPane(table);
@@ -264,6 +269,19 @@ public class DepartureOverviewGUI {
         String newDestination = destinationField.getText();
         String newID = idField.getText();
         registerDeparture(newTime, newLine, newDestination, newID);
+      }
+    });
+  }
+
+  /**
+   * Set up ActionListener for setting delay.
+   */
+  private void setupDelayActionListener() {
+    this.delayButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String newDelay = delayField.getText();
+        addDelay(newDelay);
       }
     });
   }
@@ -366,6 +384,7 @@ public class DepartureOverviewGUI {
   }
 
   /**
+   * TODO: prevent user from reversing time of day
    * Update the clock label and currentTime with the new time, then update table.
    *
    * @param newTime new time to update to.
@@ -374,16 +393,30 @@ public class DepartureOverviewGUI {
     String[] hoursMinutesSeconds = newTime.split(":");
     LocalTime newTimeObject;
 
+    // If the user inputs in one of the two valid formats (HH:MM and HH:MM:SS), proceed.
     try {
-      if (hoursMinutesSeconds.length != 3) {
+      // Throw exception if user inputs in invalid format.
+      if (hoursMinutesSeconds.length < 2 || hoursMinutesSeconds.length > 3) {
         throw new IllegalArgumentException("Invalid time format.");
       }
-      int hours = Integer.parseInt(hoursMinutesSeconds[0]);
-      int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
-      int seconds = Integer.parseInt(hoursMinutesSeconds[2]);
-      newTimeObject = LocalTime.of(hours, minutes, seconds);
-      this.currentTime = newTimeObject;
-      this.clockLabel.setText(newTimeObject.toString());
+      if (hoursMinutesSeconds.length == 2) {
+        int hours = Integer.parseInt(hoursMinutesSeconds[0]);
+        int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
+        newTimeObject = LocalTime.of(hours, minutes);
+      }
+      else {
+        int hours = Integer.parseInt(hoursMinutesSeconds[0]);
+        int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
+        int seconds = Integer.parseInt(hoursMinutesSeconds[2]);
+        newTimeObject = LocalTime.of(hours, minutes, seconds);
+      }
+      if (newTimeObject.isAfter(this.currentTime)) {
+        this.currentTime = newTimeObject;
+        this.clockLabel.setText(newTimeObject.toString());
+      }
+      else {
+        throw new IllegalArgumentException("New time cannot be earlier than current time. ");
+      }
       this.populateTable();
     }
     catch(NumberFormatException e) {
@@ -415,7 +448,8 @@ public class DepartureOverviewGUI {
     LocalTime newTimeObject = null;
     int newTrainIDObject = 0;
 
-    // Try to convert time input to LocalTime object.
+    // Try to convert time input to LocalTime object. ´
+    // If the time format is wrong or the values out of range, catch.
     try {
       if (hoursMinutesSeconds.length != 3) {
         throw new IllegalArgumentException("Invalid time format.");
@@ -438,6 +472,7 @@ public class DepartureOverviewGUI {
           "Input error.", JOptionPane.ERROR_MESSAGE);
     }
 
+    // Try to parse the value of newTrainID to an integer.
     try {
       newTrainIDObject = Integer.parseInt(newTrainID);
     }
@@ -445,18 +480,39 @@ public class DepartureOverviewGUI {
       JOptionPane.showMessageDialog(this.frame, "Invalid train ID format.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
     }
-    // Register departure if all inputs are valid.
-    try {
-      this.overview.registerDeparture(new TrainDeparture(newLine, newTrainIDObject, newDestination,
-          newTimeObject));
-    }
 
-    // Get error from DepartureOverview class.
-    catch (IllegalArgumentException e) {
+    // Ensure newTimeObject was successfully redefined before proceeding.
+    try {
+      if (newTimeObject != null) {
+        this.overview.registerDeparture(new TrainDeparture(newLine, newTrainIDObject,
+            newDestination, newTimeObject));
+      }
+    } catch (IllegalArgumentException e) {
       JOptionPane.showMessageDialog(this.frame, "Train ID: " + e.getMessage(),
           "Input error.", JOptionPane.ERROR_MESSAGE);
     }
+
     this.populateTable();
+
+  }
+
+  /**
+   * Add delay to the departure currently visible. Only works if a single departure is visible.
+   * TODO: make sure errors are handled properly
+   * @param delay delay to add.
+   */
+  private void addDelay(String delay) {
+    if (this.tableModel.getRowCount() == 1) {
+      int delayInt = Integer.parseInt(delay);
+      int Id = (int) tableModel.getValueAt(0, 2);
+      TrainDeparture current = this.overview.searchByID(Id);
+      current.addDelay(delayInt);
+      this.populateTable();
+    }
+    else {
+      JOptionPane.showMessageDialog(this.frame, "Too many/few departures selected. ",
+          "Input error.", JOptionPane.ERROR_MESSAGE);
+    }
   }
 
 }
