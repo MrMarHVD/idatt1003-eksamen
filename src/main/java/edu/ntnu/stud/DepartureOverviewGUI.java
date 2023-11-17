@@ -498,7 +498,6 @@ public class DepartureOverviewGUI {
 
   /**
    * Add delay to the departure currently visible. Only works if a single departure is visible.
-   * TODO: make sure errors are handled properly
    * @param delay delay to add.
    */
   private void addDelay(String delay) {
