@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,7 +25,6 @@ import java.awt.event.ActionListener;
 /*
 TODO: add comments for all fields and methods, add the ability to set delay and track.
 */
-
 public class DepartureOverviewGUI {
     /**
      *
@@ -44,6 +45,8 @@ public class DepartureOverviewGUI {
     private JTextField idField;
     private JButton delayButton;
     private JTextField delayField;
+    private JButton trackButton;
+    private JTextField trackField;
     private JPanel lowerPanel;
     private final DepartureOverview overview;
     private LocalTime currentTime;
@@ -76,6 +79,8 @@ public class DepartureOverviewGUI {
       this.setupRegisterActionListener();
 
       this.setupDelayActionListener();
+
+      this.setupTrackActionListener();
 
       this.initializeScrollPane();
   }
@@ -159,6 +164,7 @@ public class DepartureOverviewGUI {
     // Create sub-panels.
     JPanel registerPanel = new JPanel();
     JPanel delayPanel = new JPanel();
+    JPanel trackPanel = new JPanel();
 
     registerPanel.setLayout(new FlowLayout());
     delayPanel.setLayout(new FlowLayout());
@@ -208,9 +214,18 @@ public class DepartureOverviewGUI {
     delayPanel.add(this.delayField);
     delayPanel.add(delayButton);
 
+    // Add track components to trackPanel.
+    JLabel trackLabel = new JLabel("Track:");
+    this.trackButton = new JButton("Set track");
+    this.trackField = new JTextField(5);
+    trackPanel.add(trackLabel);
+    trackPanel.add(this.trackField);
+    trackPanel.add(this.trackButton);
+
     // Add the two sub-panels to the main panel.
     this.lowerPanel.add(registerPanel);
     this.lowerPanel.add(delayPanel);
+    this.lowerPanel.add(trackPanel);
 
     // Set padding around the lowerPanel.
     lowerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -274,7 +289,7 @@ public class DepartureOverviewGUI {
   }
 
   /**
-   * Set up ActionListener for setting delay.
+   * Set up ActionListener for adding delay.
    */
   private void setupDelayActionListener() {
     this.delayButton.addActionListener(new ActionListener() {
@@ -282,6 +297,19 @@ public class DepartureOverviewGUI {
       public void actionPerformed(ActionEvent e) {
         String newDelay = delayField.getText();
         addDelay(newDelay);
+      }
+    });
+  }
+
+  /**
+   * Set up ActionListener for setting track.
+   */
+  private void setupTrackActionListener() {
+    this.trackButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String newTrack = trackField.getText();
+        setTrack(newTrack);
       }
     });
   }
@@ -498,20 +526,34 @@ public class DepartureOverviewGUI {
 
   /**
    * Add delay to the departure currently visible. Only works if a single departure is visible.
+   *
    * @param delay delay to add.
    */
   private void addDelay(String delay) {
-    if (this.tableModel.getRowCount() == 1) {
-      int delayInt = Integer.parseInt(delay);
-      int Id = (int) tableModel.getValueAt(0, 2);
-      TrainDeparture current = this.overview.searchByID(Id);
-      current.addDelay(delayInt);
-      this.populateTable();
-    }
-    else {
-      JOptionPane.showMessageDialog(this.frame, "Too many/few departures selected. ",
-          "Input error.", JOptionPane.ERROR_MESSAGE);
-    }
+    int delayInt = Integer.parseInt(delay);
+    int selectedRow = this.table.getSelectedRow();
+    TrainDeparture current = this.overview.searchByID((int)
+        this.tableModel.getValueAt(selectedRow, 2));
+    current.addDelay(delayInt);
+    this.populateTable();
+  }
+
+  /**
+   * Set the track of the current departure.
+   *
+   * @param track new track.
+   */
+  private void setTrack(String track) {
+    int trackInt = Integer.parseInt(track);
+
+    // Finds the TrainDeparture object for which the current row is displaying data.
+
+    int selectedRow = this.table.getSelectedRow();
+    TrainDeparture current = this.overview.searchByID((int)
+        this.tableModel.getValueAt(selectedRow, 2));
+    current.setTrack(trackInt);
+    this.populateTable();
+
   }
 
 }

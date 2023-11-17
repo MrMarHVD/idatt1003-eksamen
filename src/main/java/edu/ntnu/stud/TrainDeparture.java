@@ -138,6 +138,15 @@ public class TrainDeparture {
   }
 
   /**
+   * Setter for the track of the departure.
+   *
+   * @param track new track.
+   */
+  public void setTrack(int track) {
+    this.track = track;
+  }
+
+  /**
    * This method adds a delay to the departure.
    *
    * @param minutes number of minutes delayed.
