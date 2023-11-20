@@ -31,6 +31,7 @@ public class DepartureOverview {
 
   /**
    * Contains the list of departures the overview keeps track of.
+   * I used ArrayList to allow for an indefinite number of departures.
    */
   private final ArrayList<TrainDeparture> departures;
 

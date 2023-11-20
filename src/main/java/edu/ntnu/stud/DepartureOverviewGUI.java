@@ -208,7 +208,7 @@ public class DepartureOverviewGUI {
 
     // Add delay components to delayPanel.
     JLabel delayLabel = new JLabel("Delay:");
-    this.delayButton = new JButton("Set delay");
+    this.delayButton = new JButton("Add delay");
     this.delayField = new JTextField(5);
     delayPanel.add(delayLabel);
     delayPanel.add(this.delayField);
@@ -531,10 +531,19 @@ public class DepartureOverviewGUI {
    */
   private void addDelay(String delay) {
     int delayInt = Integer.parseInt(delay);
+
+    // Finds the TrainDeparture object for which the current row is displaying data.
     int selectedRow = this.table.getSelectedRow();
-    TrainDeparture current = this.overview.searchByID((int)
-        this.tableModel.getValueAt(selectedRow, 2));
-    current.addDelay(delayInt);
+
+    if (selectedRow != -1) {
+      TrainDeparture current = this.overview.searchByID((int)
+          this.tableModel.getValueAt(selectedRow, 2));
+      current.addDelay(delayInt);
+    }
+    else {
+      JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
+          "Input error.", JOptionPane.ERROR_MESSAGE);
+    }
     this.populateTable();
   }
 
@@ -546,12 +555,19 @@ public class DepartureOverviewGUI {
   private void setTrack(String track) {
     int trackInt = Integer.parseInt(track);
 
-    // Finds the TrainDeparture object for which the current row is displaying data.
-
     int selectedRow = this.table.getSelectedRow();
-    TrainDeparture current = this.overview.searchByID((int)
-        this.tableModel.getValueAt(selectedRow, 2));
-    current.setTrack(trackInt);
+
+    // If the user has selected a row, assign new track. Else, display error.
+    if (selectedRow != -1) {
+      TrainDeparture current = this.overview.searchByID((int)
+          this.tableModel.getValueAt(selectedRow, 2));
+      current.setTrack(trackInt);
+    }
+    else {
+      JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
+          "Input error.", JOptionPane.ERROR_MESSAGE);
+    }
+
     this.populateTable();
 
   }
