@@ -121,14 +121,9 @@ public class DepartureOverview {
    * @param time the time after which all departures will be removed.
    */
   public void removeDeparturesAfter(LocalTime time) {
-    ArrayList<TrainDeparture> temp = new ArrayList<>();
 
-    for (TrainDeparture departure : this.departures) {
-      if (departure.getTime().plusMinutes(departure.getDelay()).isBefore(time)) {
-        temp.add(departure);
-      }
-    }
-    this.departures.removeAll(temp);
+    this.departures.removeIf(
+        departure -> departure.getTime().plusMinutes(departure.getDelay()).isAfter(time));
   }
 
   /**

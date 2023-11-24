@@ -15,6 +15,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 
 /**
  * This is a DepartureOverviewGUI class. It is used to establish the GUI element.
@@ -26,30 +29,99 @@ import java.awt.event.ActionListener;
 TODO: add comments for all fields and methods, add the ability to set delay and track.
 */
 public class DepartureOverviewGUI {
-    /**
-     *
-     */
-    private JFrame frame; // Consider making some of these fields scoped to specific methods
-    private JTable table;
-    private DefaultTableModel tableModel;
-    private JLabel clockLabel;
-    private JTextField clockField;
-    private JButton clockButton;
-    private JTextField searchField;
-    private JButton searchButton;
-    private JPanel topPanel;
-    private JButton registerButton;
-    private JTextField lineField;
-    private JTextField destinationField;
-    private JTextField timeField;
-    private JTextField idField;
-    private JButton delayButton;
-    private JTextField delayField;
-    private JButton trackButton;
-    private JTextField trackField;
-    private JPanel lowerPanel;
-    private final DepartureOverview overview;
-    private LocalTime currentTime;
+  /**
+   * Frame object represents the entirety of the interface.
+   */
+  private JFrame frame; // Consider making some of these fields scoped to specific methods
+
+  /**
+   * table represents the table itself.
+   */
+  private JTable table;
+  /**
+   * tableModel object defines the structure of the table.
+   */
+  private DefaultTableModel tableModel;
+
+  /**
+   * Label for the current time.
+   */
+  private JLabel clockLabel;
+
+  /**
+   * Field where new time can be entered.
+   */
+  private JTextField clockField;
+
+  /**
+   * Button to press to update clock.
+   */
+  private JButton clockButton;
+
+  /**
+   * Search field for searching ID and destination of a given departure.
+   */
+  private JTextField searchField;
+
+  /**
+   * Button to press to perform search by ID or destination.
+   */
+  private JButton searchButton;
+
+  /**
+   * Button to register a new departure using the information entered.
+   */
+  private JButton registerButton;
+
+  /**
+   * Field to enter the line of the new departure to register.
+   */
+  private JTextField lineField;
+
+  /**
+   * Field to enter the destination of the new departure to register.
+   */
+  private JTextField destinationField;
+
+  /**
+   * Field to enter the time of departure of the new departure to register.
+   */
+  private JTextField timeField;
+
+  /**
+   * Field to enter the train ID of the new departure to register.
+   */
+  private JTextField idField;
+
+  /**
+   * Button to press to add delay to the selected departure.
+   */
+  private JButton delayButton;
+
+  /**
+   * Field to input the amount of delay to add to the selected departure, measured in minutes.
+   */
+  private JTextField delayField;
+
+  /**
+   * Button to press to change the track of the selected departure.
+   */
+  private JButton trackButton;
+
+  /**
+   * Field to enter the track to change the selected departure to.
+   */
+  private JTextField trackField;
+
+  /**
+   * LocalTime-object representing the current time of day according to the overview.
+   */
+  private LocalTime currentTime;
+
+  /**
+   * The departureOverview-which the GUI as a whole, tracks.
+   */
+  private final DepartureOverview overview;
 
   /**
    * Constructor, initialises the various GUI-components.
@@ -58,38 +130,29 @@ public class DepartureOverviewGUI {
    */
   public DepartureOverviewGUI(DepartureOverview overview) {
 
-      this.overview = overview;
+    this.overview = overview;
 
-      this.currentTime = LocalTime.of(12,0,0);
+    this.currentTime = LocalTime.of(12,0,0);
 
-      this.initializeFrame();
-
-      this.initializeTableModel();
-
-      this.populateTable();
-
-      this.initializeTopPanel();
-
-      this.initializeLowerPanel();
-
-      this.setupSearchActionListener();
-
-      this.setupClockActionListener();
-
-      this.setupRegisterActionListener();
-
-      this.setupDelayActionListener();
-
-      this.setupTrackActionListener();
-
-      this.initializeScrollPane();
+    this.initializeFrame();
+    this.initializeTableModel();
+    this.populateTable();
+    this.initializeTopPanel();
+    this.initializeLowerPanel();
+    this.setupSearchActionListener();
+    this.setupClockActionListener();
+    this.setupRegisterActionListener();
+    this.setupDelayActionListener();
+    this.setupTrackActionListener();
+    this.initializeScrollPane();
+    this.setLookAndFeel();
   }
 
   /**
-   * Start method, displays the GUI.
+   * Start method, displays the GUI on the screen.
    */
   public void start() {
-      frame.setVisible(true);
+    this.frame.setVisible(true);
   }
 
   /**
@@ -99,7 +162,6 @@ public class DepartureOverviewGUI {
       frame = new JFrame("Departure Overview");
       frame.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
       frame.setSize(600, 600);
-
       frame.setLayout(new BorderLayout());
   }
 
@@ -121,7 +183,7 @@ public class DepartureOverviewGUI {
     this.searchButton = new JButton("Search");
 
     // Create a JPanel with BoxLayout.
-    this.topPanel = new JPanel();
+    JPanel topPanel = new JPanel();
     topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.PAGE_AXIS));
 
     // Create a sub-panel for search components.
@@ -158,7 +220,7 @@ public class DepartureOverviewGUI {
    * as well as add delay to a single departure.
    */
   private void initializeLowerPanel() {
-    this.lowerPanel = new JPanel();
+    JPanel lowerPanel = new JPanel();
     lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
 
     // Create sub-panels.
@@ -223,9 +285,9 @@ public class DepartureOverviewGUI {
     trackPanel.add(this.trackButton);
 
     // Add the two sub-panels to the main panel.
-    this.lowerPanel.add(registerPanel);
-    this.lowerPanel.add(delayPanel);
-    this.lowerPanel.add(trackPanel);
+    lowerPanel.add(registerPanel);
+    lowerPanel.add(delayPanel);
+    lowerPanel.add(trackPanel);
 
     // Set padding around the lowerPanel.
     lowerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -241,6 +303,22 @@ public class DepartureOverviewGUI {
   private void initializeScrollPane() {
       JScrollPane scrollPane = new JScrollPane(table);
       frame.add(scrollPane, BorderLayout.CENTER);
+  }
+
+  /**
+   * Sets the look and feel of the GUI to 'Nimbus' for better aesthetics.
+   */
+  private void setLookAndFeel() {
+    try {
+      for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+        if ("Nimbus".equals(info.getName())) {
+          UIManager.setLookAndFeel(info.getClassName());
+          break;
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -316,7 +394,7 @@ public class DepartureOverviewGUI {
 
   /**
    * Populates the table with the attributes of a specific departure if
-   * it departs after current time.
+   * and only if it departs after current time.
    *
    * @param departure departure whose attributes should be added to the table.
    */
@@ -425,7 +503,7 @@ public class DepartureOverviewGUI {
     try {
       // Throw exception if user inputs in invalid format.
       if (hoursMinutesSeconds.length < 2 || hoursMinutesSeconds.length > 3) {
-        throw new IllegalArgumentException("Invalid time format.");
+        throw new IllegalArgumentException("Time input in wrong format.");
       }
       if (hoursMinutesSeconds.length == 2) {
         int hours = Integer.parseInt(hoursMinutesSeconds[0]);
@@ -521,7 +599,6 @@ public class DepartureOverviewGUI {
     }
 
     this.populateTable();
-
   }
 
   /**
@@ -569,9 +646,7 @@ public class DepartureOverviewGUI {
     }
 
     this.populateTable();
-
   }
-
 }
 
 

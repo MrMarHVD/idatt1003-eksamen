@@ -58,10 +58,21 @@ public class TrainDispatchApp {
     //LocalTime time = LocalTime.of(14, 0);
     //overview.removeDeparturesAfter(time);
     //System.out.println(overview.getDepartures());
+    /*
+    System.out.println(overview.getDepartures());
+    overview.removeDeparturesAfter(LocalTime.of(10, 21));
+    System.out.println(overview.getDepartures());*/
+
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview); // Create your GUI here
+        GUI.start();
+      }
+    });
 
     // Create GUI
-    DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview);
-    GUI.start();
+    //DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview);
+    //GUI.start();
 
   }
 }
