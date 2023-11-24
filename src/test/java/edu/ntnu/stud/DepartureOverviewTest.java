@@ -172,6 +172,6 @@ class DepartureOverviewTest {
         this.departureOverview.searchByDestination(
             "Ålesund").get(0).getDestination());
     assertEquals(1, this.departureOverview.searchByDestination(
-        "Ålesund").size());
+        "Ålesund").size()); 
   }
 }
