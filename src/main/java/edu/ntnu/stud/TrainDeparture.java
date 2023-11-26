@@ -44,11 +44,10 @@ public class TrainDeparture {
   /**
    * This field stores the delay time of a specific departure.
    */
-
   private int delay;
 
   /**
-   * Constructor not assigning track.
+   * Parameterized constructor which does not assign track.
    *
    * @param line the line.
    * @param trainID the ID.
@@ -64,7 +63,7 @@ public class TrainDeparture {
   }
 
   /**
-   * Constructor assigning track.
+   * Parameterized constructor which does assign track.
    *
    * @param line the line.
    * @param trainID the ID.

@@ -25,8 +25,6 @@ import java.util.Set;
  * @author Håvard Daleng
  * @version 1.0, 2023-10-16
  */
-
-
 public class DepartureOverview {
 
   /**
@@ -39,7 +37,7 @@ public class DepartureOverview {
    * Default constructor for the DepartureOverview class. Generates empty overview.
    */
   public DepartureOverview() {
-      this.departures = new ArrayList<>();
+    this.departures = new ArrayList<>();
   }
 
   /**
@@ -48,9 +46,12 @@ public class DepartureOverview {
    * @param departures the initial departures.
    */
   public DepartureOverview(TrainDeparture... departures) throws IllegalArgumentException {
+
+    // Use HashSet to ensure there are no duplicate IDs, as the HashSet doesn't allow duplicates.
     Set<Integer> uniqueIds = new HashSet<>();
     ArrayList<TrainDeparture> temp = new ArrayList<>();
 
+    // Throw exception when adding a duplicate ID to the HashSet is attempted.
     for (TrainDeparture departure : departures) {
       if (!uniqueIds.add(departure.getTrainID())) {
 
@@ -68,10 +69,17 @@ public class DepartureOverview {
    *
    * @param departure the departure to register.
    */
-  public void registerDeparture(TrainDeparture departure) {
+  public void registerDeparture(TrainDeparture departure) throws IllegalArgumentException {
+
+    // Throw exception if departure to add is null.
+    if (departure == null) {
+      throw new IllegalArgumentException("Cannot add null departure. ");
+    }
+
+    // Ensure the register doesn't contain departures with duplicate ID.
     for (TrainDeparture departure1 : this.departures) {
       if (departure.getTrainID() == departure1.getTrainID()) {
-        throw new IllegalArgumentException("The register already contains departure with ID "
+        throw new IllegalArgumentException("The register already contains departure with ID. "
             + departure.getTrainID());
       }
     }

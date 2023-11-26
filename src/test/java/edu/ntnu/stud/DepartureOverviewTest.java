@@ -17,6 +17,9 @@ import org.junit.jupiter.api.Test;
 class DepartureOverviewTest {
   private DepartureOverview departureOverview;
 
+  /**
+   * Initialize an overview with one departure.
+   */
   @BeforeEach
   void setUp() {
     this.departureOverview = new DepartureOverview(new TrainDeparture("L1", 1,
@@ -64,7 +67,8 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldGetDeparture() {
-    assertEquals(1, departureOverview.getDeparture(0).getTrainID());
+    assertEquals(1,
+        departureOverview.getDeparture(0).getTrainID());
   }
 
   /**
@@ -81,6 +85,15 @@ class DepartureOverviewTest {
     assertEquals("L2", this.departureOverview.getDeparture(1).getLine());
     assertEquals(LocalTime.of(12, 15),
         this.departureOverview.getDeparture(1).getTime());
+  }
+
+  /**
+   * Tests whether attempting to register null departure yields an error.
+   */
+  @Test
+  void shouldNotAddNullDeparture() {
+    assertThrows(IllegalArgumentException.class,
+        () -> {this.departureOverview.registerDeparture(null);});
   }
 
   /**
@@ -133,8 +146,29 @@ class DepartureOverviewTest {
   }
 
   /**
+   * Ensures that the overview doesn't contain departures with departure
+   * time after which all departures were to be removed.
+   */
+  @Test
+  void shouldNotRemoveDeparturesBefore() {
+    TrainDeparture td1 = new TrainDeparture("S1", 2,
+        "Trondheim", LocalTime.of(12, 30));
+    TrainDeparture td2 = new TrainDeparture("R2", 3,
+        "Ålesund", LocalTime.of(14, 0));
+    TrainDeparture td3 = new TrainDeparture("L2", 4,
+        "Gjøvik", LocalTime.of(11, 25));
+    this.departureOverview.registerDeparture(td1);
+    this.departureOverview.registerDeparture(td2);
+    this.departureOverview.registerDeparture(td3);
+    this.departureOverview.removeDeparturesAfter(LocalTime.of(11, 45));
+    assertFalse(this.departureOverview.getDepartures().contains(td2));
+    assertFalse(this.departureOverview.getDepartures().contains(td1));
+    assertFalse(this.departureOverview.getDepartures().contains(td2));
+  }
+
+  /**
    * Tests whether searching for train ID works by adding a few different
-   * departures and then callling the method.
+   * departures and then calling the method.
    */
   @Test
   void shouldFindDepartureWithRightId() {

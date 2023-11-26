@@ -63,12 +63,16 @@ public class TrainDispatchApp {
     overview.removeDeparturesAfter(LocalTime.of(10, 21));
     System.out.println(overview.getDepartures());*/
 
+    /*
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
         DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview); // Create your GUI here
         GUI.start();
       }
-    });
+    });*/
+
+    overview.registerDeparture(null);
+
 
     // Create GUI
     //DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview);
