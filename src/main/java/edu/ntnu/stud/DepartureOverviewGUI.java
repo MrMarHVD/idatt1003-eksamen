@@ -225,11 +225,10 @@ public class DepartureOverviewGUI {
 
     // Create sub-panels.
     JPanel registerPanel = new JPanel();
-    JPanel delayPanel = new JPanel();
-    JPanel trackPanel = new JPanel();
+    JPanel delayTrackPanel = new JPanel();
 
     registerPanel.setLayout(new FlowLayout());
-    delayPanel.setLayout(new FlowLayout());
+    delayTrackPanel.setLayout(new FlowLayout());
 
     // Create labels for each field.
     JLabel lineLabel = new JLabel("Line:");
@@ -268,26 +267,25 @@ public class DepartureOverviewGUI {
     registerPanel.add(idPanel);
     registerPanel.add(this.registerButton);
 
-    // Add delay components to delayPanel.
+    // Add delay components to delayTrackPanel.
     JLabel delayLabel = new JLabel("Delay:");
     this.delayButton = new JButton("Add delay");
     this.delayField = new JTextField(5);
-    delayPanel.add(delayLabel);
-    delayPanel.add(this.delayField);
-    delayPanel.add(delayButton);
+    delayTrackPanel.add(delayLabel);
+    delayTrackPanel.add(this.delayField);
+    delayTrackPanel.add(delayButton);
 
-    // Add track components to trackPanel.
+    // Add track components to delayTrackPanel.
     JLabel trackLabel = new JLabel("Track:");
     this.trackButton = new JButton("Set track");
     this.trackField = new JTextField(5);
-    trackPanel.add(trackLabel);
-    trackPanel.add(this.trackField);
-    trackPanel.add(this.trackButton);
+    delayTrackPanel.add(trackLabel);
+    delayTrackPanel.add(this.trackField);
+    delayTrackPanel.add(this.trackButton);
 
     // Add the two sub-panels to the main panel.
     lowerPanel.add(registerPanel);
-    lowerPanel.add(delayPanel);
-    lowerPanel.add(trackPanel);
+    lowerPanel.add(delayTrackPanel);
 
     // Set padding around the lowerPanel.
     lowerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -406,7 +404,7 @@ public class DepartureOverviewGUI {
           departure.getTrainID(),
           departure.getDestination(),
           departure.getDelay() == 0 ? "" : departure.getDelay(),
-          departure.getTrack() == 0 ? "" : departure.getTrack()
+          departure.getTrack() == 0 || departure.getTrack() == -1 ? "" : departure.getTrack()
       };
       tableModel.addRow(rowData);
     }
@@ -503,7 +501,8 @@ public class DepartureOverviewGUI {
     try {
       // Throw exception if user inputs in invalid format.
       if (hoursMinutesSeconds.length < 2 || hoursMinutesSeconds.length > 3) {
-        throw new IllegalArgumentException("Time input in wrong format.");
+        throw new IllegalArgumentException("Did you remember "
+            + "colon between hours and minutes/seconds?");
       }
       if (hoursMinutesSeconds.length == 2) {
         int hours = Integer.parseInt(hoursMinutesSeconds[0]);
@@ -550,32 +549,70 @@ public class DepartureOverviewGUI {
   private void registerDeparture(String newTime, String newLine,
       String newDestination, String newTrainID) {
 
+    // Split hours, minutes and seconds using colon.
     String[] hoursMinutesSeconds = newTime.split(":");
     LocalTime newTimeObject = null;
     int newTrainIDObject = 0;
 
+    // Ensure a train line has been provided before proceeding.
+    try {
+      if (Objects.equals(newLine, "")) {
+        throw new IllegalArgumentException("No line provided.");
+      }
+    }
+    catch (IllegalArgumentException e) {
+      JOptionPane.showMessageDialog(this.frame, "Train line: " + e.getMessage(),
+          "Input error.", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    // Ensure a destination has been provided before proceeding.
+    try {
+      if (Objects.equals(newDestination, "")) {
+        throw new IllegalArgumentException("No destination provided. ");
+      }
+    }
+    catch (IllegalArgumentException e) {
+      JOptionPane.showMessageDialog(this.frame, "Train destination: " + e.getMessage(),
+          "Input error.", JOptionPane.ERROR_MESSAGE);
+      return;
+    }
+
+    // If the user inputs in one of the two valid formats (HH:MM and HH:MM:SS), proceed.
     // Try to convert time input to LocalTime object. ´
     // If the time format is wrong or the values out of range, catch.
     try {
-      if (hoursMinutesSeconds.length != 3) {
+      if (hoursMinutesSeconds.length < 2 || hoursMinutesSeconds.length > 3) {
         throw new IllegalArgumentException("Invalid time format.");
       }
-      int hours = Integer.parseInt(hoursMinutesSeconds[0]);
-      int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
-      int seconds = Integer.parseInt(hoursMinutesSeconds[2]);
-      newTimeObject = LocalTime.of(hours, minutes, seconds);
+
+      else if (hoursMinutesSeconds.length == 2) {
+        int hours = Integer.parseInt(hoursMinutesSeconds[0]);
+        int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
+        newTimeObject = LocalTime.of(hours, minutes);
+      }
+
+      else {
+        int hours = Integer.parseInt(hoursMinutesSeconds[0]);
+        int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
+        int seconds = Integer.parseInt(hoursMinutesSeconds[2]);
+        newTimeObject = LocalTime.of(hours, minutes, seconds);
+      }
     }
     catch(NumberFormatException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time format.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
+      return;
     }
     catch(DateTimeException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time: values out of range",
           "Input error.", JOptionPane.ERROR_MESSAGE);
+      return;
     }
     catch(IllegalArgumentException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time format: " + e.getMessage(),
           "Input error.", JOptionPane.ERROR_MESSAGE);
+      return;
     }
 
     // Try to parse the value of newTrainID to an integer.
@@ -585,6 +622,7 @@ public class DepartureOverviewGUI {
     catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid train ID format.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
+      return;
     }
 
     // Ensure newTimeObject was successfully redefined before proceeding.
@@ -596,6 +634,7 @@ public class DepartureOverviewGUI {
     } catch (IllegalArgumentException e) {
       JOptionPane.showMessageDialog(this.frame, "Train ID: " + e.getMessage(),
           "Input error.", JOptionPane.ERROR_MESSAGE);
+      return;
     }
 
     this.populateTable();

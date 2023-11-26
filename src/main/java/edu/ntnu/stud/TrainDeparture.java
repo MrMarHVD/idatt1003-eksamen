@@ -19,7 +19,7 @@ public class TrainDeparture {
   /**
    * Stores the time of departure.
    */
-  private LocalTime time;
+  private final LocalTime time;
 
   /**
    * Stores the train line, consisting of a string  containing a letter and a number in that order.
@@ -60,6 +60,7 @@ public class TrainDeparture {
     this.destination = destination;
     this.time = time;
     this.delay = 0;
+    this.track = -1;
   }
 
   /**
