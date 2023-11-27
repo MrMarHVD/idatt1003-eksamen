@@ -142,6 +142,13 @@ public class TrainDeparture {
   }
 
   /**
+   * Getter for the status of the departure, cancelled = true or cancelled = false.
+   *
+   * @return boolean representing status of the departure.
+   */
+  public boolean getCancelStatus() { return this.cancel; }
+
+  /**
    * Setter for the track of the departure.
    *
    * @param track new track.

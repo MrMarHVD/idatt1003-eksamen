@@ -30,21 +30,21 @@ TODO: add comments for all fields and methods, add the ability to set delay and 
 */
 public class DepartureOverviewGUI {
   /**
-   * Frame object represents the entirety of the interface.
+   * JFrame object represents the entirety of the interface.
    */
   private JFrame frame; // Consider making some of these fields scoped to specific methods
 
   /**
-   * table represents the table itself.
+   * JTable object represents the table itself.
    */
   private JTable table;
   /**
-   * tableModel object defines the structure of the table.
+   * DefaultTableModel object defines the structure of the table.
    */
   private DefaultTableModel tableModel;
 
   /**
-   * Label for the current time.
+   * JLabel object for the current time.
    */
   private JLabel clockLabel;
 
@@ -149,6 +149,7 @@ public class DepartureOverviewGUI {
     this.setupRegisterActionListener();
     this.setupDelayActionListener();
     this.setupTrackActionListener();
+    this.setupCancelActionListener();
     this.initializeScrollPane();
     this.setLookAndFeel();
   }
@@ -174,7 +175,8 @@ public class DepartureOverviewGUI {
    * Initialises the GUI table model.
    */
   private void initializeTableModel() {
-      String[] columnLabels = {"Departure time", "Line", "ID", "Destination", "Delay", "Track"};
+      String[] columnLabels = {"Departure time", "Line", "ID", "Destination",
+          "Status", "Track"};
 
       this.tableModel = new DefaultTableModel(columnLabels, 0);
       this.table = new JTable(tableModel);
@@ -409,7 +411,7 @@ public class DepartureOverviewGUI {
   /**
    * Set up ActionListener for removing tracks.
    */
-  private void setupRemoveActionListener() {
+  private void setupCancelActionListener() {
     // ActionListener object checks for
     this.removeButton.addActionListener(new ActionListener() {
       @Override
@@ -426,13 +428,23 @@ public class DepartureOverviewGUI {
    * @param departure departure whose attributes should be added to the table.
    */
   private void populateTableRow(TrainDeparture departure) {
-    if (departure.getTime().isAfter(this.currentTime)) {
+    String status = "";
+
+    // Check whether departure is cancelled to determine what to display in 'status' column.
+    if (departure.getCancelStatus()) {
+      status = "Cancelled";
+    }
+    else {
+      status = "New time: " + departure.getTime().plusMinutes(departure.getDelay()).toString();
+    }
+
+    if (departure.getTime().plusMinutes(departure.getDelay()).isAfter(this.currentTime)) {
       Object[] rowData = {
           departure.getTime(),
           departure.getLine(),
           departure.getTrainID(),
           departure.getDestination(),
-          departure.getDelay() == 0 ? "" : departure.getDelay(),
+          status.equals("New time: " + departure.getTime().toString()) ? "" : status,
           departure.getTrack() == 0 || departure.getTrack() == -1 ? "" : departure.getTrack()
       };
       tableModel.addRow(rowData);
@@ -726,11 +738,12 @@ public class DepartureOverviewGUI {
           this.tableModel.getValueAt(selectedRow, 2));
       current.cancelDeparture();
     }
-
     else {
       JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
     }
+
+    this.populateTable();
   }
 }
 
