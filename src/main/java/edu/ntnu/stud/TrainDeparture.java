@@ -46,6 +46,8 @@ public class TrainDeparture {
    */
   private int delay;
 
+  private boolean cancel;
+
   /**
    * Parameterized constructor which does not assign track.
    *
@@ -61,6 +63,7 @@ public class TrainDeparture {
     this.time = time;
     this.delay = 0;
     this.track = -1;
+    this.cancel = false;
   }
 
   /**
@@ -79,6 +82,7 @@ public class TrainDeparture {
     this.time = time;
     this.track = track;
     this.delay = 0;
+    this.cancel = false;
   }
 
   /**
@@ -147,6 +151,13 @@ public class TrainDeparture {
   }
 
   /**
+   * Cancel-method allowing the user to cancel this departure.
+   */
+  public void cancelDeparture() {
+    this.cancel = true;
+  }
+
+  /**
    * This method adds a delay to the departure.
    *
    * @param minutes number of minutes delayed.
@@ -159,8 +170,5 @@ public class TrainDeparture {
       this.delay += minutes;
     }
   }
-
-  // Add negative test.
-
 
 }

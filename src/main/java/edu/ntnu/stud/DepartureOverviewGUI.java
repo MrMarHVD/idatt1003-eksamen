@@ -114,6 +114,11 @@ public class DepartureOverviewGUI {
   private JTextField trackField;
 
   /**
+   * Button to press to remove the currently selected departure.
+   */
+  private JButton removeButton;
+
+  /**
    * LocalTime-object representing the current time of day according to the overview.
    */
   private LocalTime currentTime;
@@ -217,7 +222,7 @@ public class DepartureOverviewGUI {
 
   /**
    * Initialises the lower panel, allowing the user to register new departures
-   * as well as add delay to a single departure.
+   * as well as add delay or change track of a single departure.
    */
   private void initializeLowerPanel() {
     JPanel lowerPanel = new JPanel();
@@ -226,9 +231,12 @@ public class DepartureOverviewGUI {
     // Create sub-panels.
     JPanel registerPanel = new JPanel();
     JPanel delayTrackPanel = new JPanel();
+    JPanel removePanel = new JPanel();
 
+    // Set the layouts of the various sub-panels.
     registerPanel.setLayout(new FlowLayout());
     delayTrackPanel.setLayout(new FlowLayout());
+    removePanel.setLayout(new FlowLayout());
 
     // Create labels for each field.
     JLabel lineLabel = new JLabel("Line:");
@@ -242,6 +250,8 @@ public class DepartureOverviewGUI {
     this.timeField = new JTextField(5);
     this.idField = new JTextField(5);
     this.registerButton = new JButton("Register");
+
+    this.removeButton = new JButton("Remove departure");
 
     // Group each label and text field in its own panel.
     JPanel linePanel = new JPanel();
@@ -275,6 +285,9 @@ public class DepartureOverviewGUI {
     delayTrackPanel.add(this.delayField);
     delayTrackPanel.add(delayButton);
 
+    // Add removeButton to corresponding panel.
+    removePanel.add(this.removeButton);
+
     // Add track components to delayTrackPanel.
     JLabel trackLabel = new JLabel("Track:");
     this.trackButton = new JButton("Set track");
@@ -286,6 +299,7 @@ public class DepartureOverviewGUI {
     // Add the two sub-panels to the main panel.
     lowerPanel.add(registerPanel);
     lowerPanel.add(delayTrackPanel);
+    lowerPanel.add(removePanel);
 
     // Set padding around the lowerPanel.
     lowerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
@@ -323,7 +337,7 @@ public class DepartureOverviewGUI {
    * Sets up ActionListener for search, allowing the user to access the search functionality.
    */
   private void setupSearchActionListener() {
-      // ActionListener object checks for search inputs in the field
+      // ActionListener object checks for search inputs in the field.
       searchButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -337,7 +351,7 @@ public class DepartureOverviewGUI {
    * Set up ActionListener for clock, allowing the user to set the time.
    */
   private void setupClockActionListener() {
-    // ActionListener object checks for search inputs in the field
+    // ActionListener object checks for new time in the clock field.
     this.clockButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -351,7 +365,7 @@ public class DepartureOverviewGUI {
    * Set up ActionListener for registering new departures.
    */
   private void setupRegisterActionListener() {
-    // ActionListener object checks for search inputs in the field
+    // ActionListener object checks for inputs in the registration fields.
     this.registerButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -368,6 +382,7 @@ public class DepartureOverviewGUI {
    * Set up ActionListener for adding delay.
    */
   private void setupDelayActionListener() {
+    // ActionListener object checks for input in the delay field.
     this.delayButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -381,11 +396,25 @@ public class DepartureOverviewGUI {
    * Set up ActionListener for setting track.
    */
   private void setupTrackActionListener() {
+    // ActionListener object checks for input in the track field.
     this.trackButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         String newTrack = trackField.getText();
         setTrack(newTrack);
+      }
+    });
+  }
+
+  /**
+   * Set up ActionListener for removing tracks.
+   */
+  private void setupRemoveActionListener() {
+    // ActionListener object checks for
+    this.removeButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        cancelDeparture();
       }
     });
   }
@@ -416,7 +445,7 @@ public class DepartureOverviewGUI {
   private void populateTable() {
     // Populates the table with all departures.
     tableModel.setRowCount(0);
-    for (TrainDeparture departure : overview.getDepartures()) {
+    for (TrainDeparture departure : this.overview.getDepartures()) {
       this.populateTableRow(departure);
     }
   }
@@ -488,7 +517,6 @@ public class DepartureOverviewGUI {
   }
 
   /**
-   * TODO: prevent user from reversing time of day
    * Update the clock label and currentTime with the new time, then update table.
    *
    * @param newTime new time to update to.
@@ -664,7 +692,7 @@ public class DepartureOverviewGUI {
   }
 
   /**
-   * Set the track of the current departure.
+   * Set the track of the currently selected departure, display error otherwise.
    *
    * @param track new track.
    */
@@ -685,6 +713,24 @@ public class DepartureOverviewGUI {
     }
 
     this.populateTable();
+  }
+
+  /**
+   * Cancel the currently selected departure if there is one, display error otherwise.
+   */
+  private void cancelDeparture() {
+    int selectedRow = this.table.getSelectedRow();
+
+    if (selectedRow != -1) {
+      TrainDeparture current = this.overview.searchByID((int)
+          this.tableModel.getValueAt(selectedRow, 2));
+      current.cancelDeparture();
+    }
+
+    else {
+      JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
+          "Input error.", JOptionPane.ERROR_MESSAGE);
+    }
   }
 }
 

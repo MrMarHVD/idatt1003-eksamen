@@ -72,6 +72,25 @@ class DepartureOverviewTest {
   }
 
   /**
+   * Tests whether 'getDepartures()' method yields a list with the right number
+   * of elements.
+   */
+  @Test
+  void shouldGetDepartures() {
+    TrainDeparture td1 = new TrainDeparture("S1", 2,
+        "Trondheim", LocalTime.of(12, 30));
+    TrainDeparture td2 = new TrainDeparture("R2", 3,
+        "Ålesund", LocalTime.of(14, 0));
+    TrainDeparture td3 = new TrainDeparture("L2", 4,
+        "Gjøvik", LocalTime.of(11, 25));
+    this.departureOverview.registerDeparture(td1);
+    this.departureOverview.registerDeparture(td2);
+    this.departureOverview.registerDeparture(td3);
+
+    assertEquals(4, this.departureOverview.getDepartures().size());
+  }
+
+  /**
    * Tests whether a new departure registered has the correct fields, in other words
    * that it's been registered correctly.
    */
