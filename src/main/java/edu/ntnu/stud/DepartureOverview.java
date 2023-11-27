@@ -9,12 +9,12 @@
 
 package edu.ntnu.stud;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.time.LocalTime;
-import java.util.Objects;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -53,9 +53,9 @@ public class DepartureOverview {
 
     // Throw exception when adding a duplicate ID to the HashSet is attempted.
     for (TrainDeparture departure : departures) {
-      if (!uniqueIds.add(departure.getTrainID())) {
+      if (!uniqueIds.add(departure.getTrainId())) {
 
-        throw new IllegalArgumentException("Duplicate train ID found: " + departure.getTrainID());
+        throw new IllegalArgumentException("Duplicate train ID found: " + departure.getTrainId());
       }
       temp.add(departure);
     }
@@ -78,9 +78,9 @@ public class DepartureOverview {
 
     // Ensure the register doesn't contain departures with duplicate ID.
     for (TrainDeparture departure1 : this.departures) {
-      if (departure.getTrainID() == departure1.getTrainID()) {
+      if (departure.getTrainId() == departure1.getTrainId()) {
         throw new IllegalArgumentException("The register already contains departure with ID. "
-            + departure.getTrainID());
+            + departure.getTrainId());
       }
     }
     this.departures.add(departure);
@@ -115,8 +115,7 @@ public class DepartureOverview {
    */
   public void sortDepartures() {
 
-    departures.sort((TrainDeparture o1, TrainDeparture o2) ->
-    {
+    departures.sort((TrainDeparture o1, TrainDeparture o2) -> {
       LocalTime newTime1 = o1.getTime().plusMinutes(o1.getDelay());
       LocalTime newTime2 = o2.getTime().plusMinutes(o2.getDelay());
       return newTime1.compareTo(newTime2);
@@ -140,11 +139,11 @@ public class DepartureOverview {
    * @param input ID to search with.
    * @return TrainDeparture with ID in question, if any.
    */
-  public TrainDeparture searchByID(int input) {
+  public TrainDeparture searchById(int input) {
     TrainDeparture result = null;
 
     for (TrainDeparture departure : this.getDepartures()) {
-      if (departure.getTrainID() == input) {
+      if (departure.getTrainId() == input) {
         result = departure;
       }
     }

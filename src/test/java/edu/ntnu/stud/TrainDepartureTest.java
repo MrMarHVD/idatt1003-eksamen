@@ -34,7 +34,7 @@ class TrainDepartureTest {
         "Oslo", LocalTime.of(12, 0), 1);
 
     Assertions.assertEquals("L1", trainDeparture.getLine());
-    Assertions.assertEquals(1, trainDeparture.getTrainID());
+    Assertions.assertEquals(1, trainDeparture.getTrainId());
     Assertions.assertEquals("Oslo", trainDeparture.getDestination());
     Assertions.assertEquals(LocalTime.of(12, 0), trainDeparture.getTime());
   }

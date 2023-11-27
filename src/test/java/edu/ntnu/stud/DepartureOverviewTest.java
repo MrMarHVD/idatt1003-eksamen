@@ -68,7 +68,7 @@ class DepartureOverviewTest {
   @Test
   void shouldGetDeparture() {
     assertEquals(1,
-        departureOverview.getDeparture(0).getTrainID());
+        departureOverview.getDeparture(0).getTrainId());
   }
 
   /**
@@ -100,7 +100,7 @@ class DepartureOverviewTest {
         "Trondheim", LocalTime.of(12, 15, 0));
     this.departureOverview.registerDeparture(td1);
 
-    assertEquals(2, this.departureOverview.getDeparture(1).getTrainID());
+    assertEquals(2, this.departureOverview.getDeparture(1).getTrainId());
     assertEquals("L2", this.departureOverview.getDeparture(1).getLine());
     assertEquals(LocalTime.of(12, 15),
         this.departureOverview.getDeparture(1).getTime());
@@ -201,7 +201,7 @@ class DepartureOverviewTest {
     this.departureOverview.registerDeparture(td2);
     this.departureOverview.registerDeparture(td3);
 
-    assertEquals(4, this.departureOverview.searchByID(4).getTrainID());
+    assertEquals(4, this.departureOverview.searchById(4).getTrainId());
   }
 
   /**

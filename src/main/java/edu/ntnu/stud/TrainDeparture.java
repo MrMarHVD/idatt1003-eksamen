@@ -29,7 +29,7 @@ public class TrainDeparture {
   /**
    * Stores the specific ID of this departure in the form of an integer, serving as an identifier.
    */
-  private final int trainID;
+  private final int trainId;
 
   /**
    * Stores a string representing the destination of the train departing.
@@ -52,13 +52,13 @@ public class TrainDeparture {
    * Parameterized constructor which does not assign track.
    *
    * @param line the line.
-   * @param trainID the ID.
+   * @param trainId the ID.
    * @param destination the destination.
    * @param time the time of departure.
    */
-  public TrainDeparture(String line, int trainID, String destination, LocalTime time) {
+  public TrainDeparture(String line, int trainId, String destination, LocalTime time) {
     this.line = line;
-    this.trainID = trainID;
+    this.trainId = trainId;
     this.destination = destination;
     this.time = time;
     this.delay = 0;
@@ -70,14 +70,14 @@ public class TrainDeparture {
    * Parameterized constructor which does assign track.
    *
    * @param line the line.
-   * @param trainID the ID.
+   * @param trainId the ID.
    * @param destination the destination.
    * @param time the time of departure.
    * @param track the track of departure.
    */
-  public TrainDeparture(String line, int trainID, String destination, LocalTime time, int track) {
+  public TrainDeparture(String line, int trainId, String destination, LocalTime time, int track) {
     this.line = line;
-    this.trainID = trainID;
+    this.trainId = trainId;
     this.destination = destination;
     this.time = time;
     this.track = track;
@@ -109,8 +109,8 @@ public class TrainDeparture {
    * @return the ID of departure.
    */
 
-  public int getTrainID() {
-    return trainID;
+  public int getTrainId() {
+    return trainId;
   }
 
   /**
@@ -146,7 +146,9 @@ public class TrainDeparture {
    *
    * @return boolean representing status of the departure.
    */
-  public boolean getCancelStatus() { return this.cancel; }
+  public boolean getCancelStatus() {
+    return this.cancel;
+  }
 
   /**
    * Setter for the track of the departure.
@@ -172,8 +174,7 @@ public class TrainDeparture {
   public void addDelay(int minutes) {
     if (this.getDelay() + minutes <= 0) {
       throw new IllegalArgumentException("The delay entered is invalid.");
-    }
-    else {
+    } else {
       this.delay += minutes;
     }
   }

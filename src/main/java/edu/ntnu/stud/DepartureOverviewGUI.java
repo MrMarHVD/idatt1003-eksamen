@@ -18,7 +18,6 @@ import java.awt.event.ActionListener;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-
 /**
  * This is a DepartureOverviewGUI class. It is used to establish the GUI element.
  *
@@ -26,7 +25,6 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @version 1.0, 2023-10-16.
  */
 /*
-TODO: add comments for all fields and methods, add the ability to set delay and track.
 */
 public class DepartureOverviewGUI {
   /**
@@ -442,7 +440,7 @@ public class DepartureOverviewGUI {
       Object[] rowData = {
           departure.getTime(),
           departure.getLine(),
-          departure.getTrainID(),
+          departure.getTrainId(),
           departure.getDestination(),
           status.equals("New time: " + departure.getTime().toString()) ? "" : status,
           departure.getTrack() == 0 || departure.getTrack() == -1 ? "" : departure.getTrack()
@@ -497,11 +495,11 @@ public class DepartureOverviewGUI {
    * @param input input ID to search for.
    */
   private void searchByID(int input) {
-    TrainDeparture result = this.overview.searchByID(input);
+    TrainDeparture result = this.overview.searchById(input);
 
     // Populates the table with resulting departure if it exists.
     if (input != 0 && this.overview.getDepartures().contains(result)) {
-      this.populateTableRow(this.overview.searchByID(input));
+      this.populateTableRow(this.overview.searchById(input));
     }
 
     // Get original overview if inputID = 0.
@@ -692,7 +690,7 @@ public class DepartureOverviewGUI {
     int selectedRow = this.table.getSelectedRow();
 
     if (selectedRow != -1) {
-      TrainDeparture current = this.overview.searchByID((int)
+      TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
       current.addDelay(delayInt);
     }
@@ -715,7 +713,7 @@ public class DepartureOverviewGUI {
 
     // If the user has selected a row, assign new track. Else, display error.
     if (selectedRow != -1) {
-      TrainDeparture current = this.overview.searchByID((int)
+      TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
       current.setTrack(trackInt);
     }
@@ -734,7 +732,7 @@ public class DepartureOverviewGUI {
     int selectedRow = this.table.getSelectedRow();
 
     if (selectedRow != -1) {
-      TrainDeparture current = this.overview.searchByID((int)
+      TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
       current.cancelDeparture();
     }
