@@ -127,7 +127,7 @@ public class DepartureOverviewGui {
 
     this.overview = overview;
 
-    this.currentTime = LocalTime.of(12,0,0);
+    this.currentTime = LocalTime.of(12, 0, 0);
     this.initializeFrame();
     this.initializeTableModel();
     this.populateTable();
@@ -154,21 +154,21 @@ public class DepartureOverviewGui {
    * Initialises the GUI frame.
    */
   private void initializeFrame() {
-      frame = new JFrame("Departure Overview");
-      frame.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
-      frame.setSize(600, 600);
-      frame.setLayout(new BorderLayout());
+    frame = new JFrame("Departure Overview");
+    frame.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
+    frame.setSize(600, 600);
+    frame.setLayout(new BorderLayout());
   }
 
   /**
    * Initialises the GUI table model.
    */
   private void initializeTableModel() {
-      String[] columnLabels = {"Departure time", "Line", "ID", "Destination",
-          "Status", "Track"};
+    String[] columnLabels = {"Departure time", "Line", "ID", "Destination",
+        "Status", "Track"};
 
-      this.tableModel = new DefaultTableModel(columnLabels, 0);
-      this.table = new JTable(tableModel);
+    this.tableModel = new DefaultTableModel(columnLabels, 0);
+    this.table = new JTable(tableModel);
   }
 
   /**
@@ -230,10 +230,10 @@ public class DepartureOverviewGui {
     removePanel.setLayout(new FlowLayout());
 
     // Create labels for each field.
-    JLabel lineLabel = new JLabel("Line:");
-    JLabel destinationLabel = new JLabel("Destination:");
-    JLabel timeLabel = new JLabel("Time:");
-    JLabel idLabel = new JLabel("Train ID:");
+    final JLabel lineLabel = new JLabel("Line:");
+    final JLabel destinationLabel = new JLabel("Destination:");
+    final JLabel timeLabel = new JLabel("Time:");
+    final JLabel idLabel = new JLabel("Train ID:");
 
     // Initialize the text fields.
     this.lineField = new JTextField(5);
@@ -304,8 +304,8 @@ public class DepartureOverviewGui {
    * Initialises the scroll pane, allowing the user to scroll through departures.
    */
   private void initializeScrollPane() {
-      JScrollPane scrollPane = new JScrollPane(table);
-      frame.add(scrollPane, BorderLayout.CENTER);
+    JScrollPane scrollPane = new JScrollPane(table);
+    frame.add(scrollPane, BorderLayout.CENTER);
   }
 
   /**
@@ -328,14 +328,14 @@ public class DepartureOverviewGui {
    * Sets up ActionListener for search, allowing the user to access the search functionality.
    */
   private void setupSearchActionListener() {
-      // ActionListener object checks for search inputs in the field.
-      searchButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          String searchQuery = searchField.getText();
-          search(searchQuery);
-        }
-      });
+    // ActionListener object checks for search inputs in the field.
+    searchButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        String searchQuery = searchField.getText();
+        search(searchQuery);
+      }
+    });
   }
 
   /**
@@ -363,8 +363,8 @@ public class DepartureOverviewGui {
         String newTime = timeField.getText();
         String newLine = lineField.getText();
         String newDestination = destinationField.getText();
-        String newID = idField.getText();
-        registerDeparture(newTime, newLine, newDestination, newID);
+        String newId = idField.getText();
+        registerDeparture(newTime, newLine, newDestination, newId);
       }
     });
   }
@@ -422,8 +422,7 @@ public class DepartureOverviewGui {
     // Check whether departure is cancelled to determine what to display in 'status' column.
     if (departure.getCancelStatus()) {
       status = "Cancelled";
-    }
-    else {
+    } else {
       status = "New time: " + departure.getTime().plusMinutes(departure.getDelay()).toString();
     }
 
@@ -462,23 +461,17 @@ public class DepartureOverviewGui {
    */
   private void search(String input) {
     tableModel.setRowCount(0);
-    int inputID;
+    int inputId;
 
     if (!Objects.equals(input, "")) {
       try {
-        inputID = Integer.parseInt(input);
-        this.searchByID(inputID);
+        inputId = Integer.parseInt(input);
+        this.searchById(inputId);
+      } catch (NumberFormatException e) {
+        this.searchByDestination(input); // Search by destination instead if input is non-empty.
       }
-
-      // Search by destination instead if the input is a non-empty string.
-      catch (NumberFormatException e) {
-        this.searchByDestination(input);
-      }
-    }
-
-    // Get original overview if input is empty string.
-    else {
-      this.populateTable();
+    } else {
+      this.populateTable(); // Get original overview if input is empty string.
     }
   }
 
@@ -487,17 +480,14 @@ public class DepartureOverviewGui {
    *
    * @param input input ID to search for.
    */
-  private void searchByID(int input) {
+  private void searchById(int input) {
     TrainDeparture result = this.overview.searchById(input);
 
     // Populates the table with resulting departure if it exists.
     if (input != 0 && this.overview.getDepartures().contains(result)) {
       this.populateTableRow(this.overview.searchById(input));
-    }
-
-    // Get original overview if inputID = 0.
-    else {
-      this.populateTable();
+    } else {
+      this.populateTable();  // Get original overview if inputID = 0.
     }
   }
 
@@ -513,8 +503,7 @@ public class DepartureOverviewGui {
       for (TrainDeparture departure : results) {
         this.populateTableRow(departure);
       }
-    }
-    else {
+    } else {
       this.populateTable();
     }
   }
@@ -539,8 +528,7 @@ public class DepartureOverviewGui {
         int hours = Integer.parseInt(hoursMinutesSeconds[0]);
         int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
         newTimeObject = LocalTime.of(hours, minutes);
-      }
-      else {
+      } else {
         int hours = Integer.parseInt(hoursMinutesSeconds[0]);
         int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
         int seconds = Integer.parseInt(hoursMinutesSeconds[2]);
@@ -551,21 +539,18 @@ public class DepartureOverviewGui {
         this.currentTime = newTimeObject;
         this.clockLabel.setText(newTimeObject.toString());
         this.overview.removeDeparturesBefore(this.currentTime);
-      }
-      else {
+      } else {
         throw new IllegalArgumentException("New time cannot be earlier than current time. ");
       }
       this.populateTable();
-    }
-    catch(NumberFormatException e) {
+
+    } catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time format.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
-    }
-    catch(DateTimeException e) {
+    } catch (DateTimeException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time: values out of range",
           "Input error.", JOptionPane.ERROR_MESSAGE);
-    }
-    catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time format: " + e.getMessage(),
           "Input error.", JOptionPane.ERROR_MESSAGE);
     }
@@ -577,23 +562,22 @@ public class DepartureOverviewGui {
    * @param newTime time of departure.
    * @param newLine train line.
    * @param newDestination destination.
-   * @param newTrainID ID of the train departure.
+   * @param newTrainId ID of the train departure.
    */
   private void registerDeparture(String newTime, String newLine,
-      String newDestination, String newTrainID) {
+      String newDestination, String newTrainId) {
 
     // Split hours, minutes and seconds using colon.
     String[] hoursMinutesSeconds = newTime.split(":");
     LocalTime newTimeObject = null;
-    int newTrainIDObject = 0;
+    int newTrainIdObject = 0;
 
     // Ensure a train line has been provided before proceeding.
     try {
       if (Objects.equals(newLine, "")) {
         throw new IllegalArgumentException("No line provided.");
       }
-    }
-    catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       JOptionPane.showMessageDialog(this.frame, "Train line: " + e.getMessage(),
           "Input error.", JOptionPane.ERROR_MESSAGE);
       return;
@@ -604,8 +588,7 @@ public class DepartureOverviewGui {
       if (Objects.equals(newDestination, "")) {
         throw new IllegalArgumentException("No destination provided. ");
       }
-    }
-    catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       JOptionPane.showMessageDialog(this.frame, "Train destination: " + e.getMessage(),
           "Input error.", JOptionPane.ERROR_MESSAGE);
       return;
@@ -617,32 +600,25 @@ public class DepartureOverviewGui {
     try {
       if (hoursMinutesSeconds.length < 2 || hoursMinutesSeconds.length > 3) {
         throw new IllegalArgumentException("Invalid time format.");
-      }
-
-      else if (hoursMinutesSeconds.length == 2) {
+      } else if (hoursMinutesSeconds.length == 2) {
         int hours = Integer.parseInt(hoursMinutesSeconds[0]);
         int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
         newTimeObject = LocalTime.of(hours, minutes);
-      }
-
-      else {
+      } else {
         int hours = Integer.parseInt(hoursMinutesSeconds[0]);
         int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
         int seconds = Integer.parseInt(hoursMinutesSeconds[2]);
         newTimeObject = LocalTime.of(hours, minutes, seconds);
       }
-    }
-    catch(NumberFormatException e) {
+    } catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time format.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
       return;
-    }
-    catch(DateTimeException e) {
+    } catch (DateTimeException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time: values out of range",
           "Input error.", JOptionPane.ERROR_MESSAGE);
       return;
-    }
-    catch(IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time format: " + e.getMessage(),
           "Input error.", JOptionPane.ERROR_MESSAGE);
       return;
@@ -650,9 +626,8 @@ public class DepartureOverviewGui {
 
     // Try to parse the value of newTrainID to an integer.
     try {
-      newTrainIDObject = Integer.parseInt(newTrainID);
-    }
-    catch (NumberFormatException e) {
+      newTrainIdObject = Integer.parseInt(newTrainId);
+    } catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid train ID format.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
       return;
@@ -661,7 +636,7 @@ public class DepartureOverviewGui {
     // Ensure newTimeObject was successfully redefined before proceeding.
     try {
       if (newTimeObject != null) {
-        this.overview.registerDeparture(new TrainDeparture(newLine, newTrainIDObject,
+        this.overview.registerDeparture(new TrainDeparture(newLine, newTrainIdObject,
             newDestination, newTimeObject));
       }
     } catch (IllegalArgumentException e) {
@@ -688,8 +663,7 @@ public class DepartureOverviewGui {
       TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
       current.addDelay(delayInt);
-    }
-    else {
+    } else {
       JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
     }
@@ -711,8 +685,7 @@ public class DepartureOverviewGui {
       TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
       current.setTrack(trackInt);
-    }
-    else {
+    } else {
       JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
     }
@@ -730,8 +703,7 @@ public class DepartureOverviewGui {
       TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
       current.cancelDeparture();
-    }
-    else {
+    } else {
       JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
     }
