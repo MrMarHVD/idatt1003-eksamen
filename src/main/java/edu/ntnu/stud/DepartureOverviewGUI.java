@@ -553,9 +553,11 @@ public class DepartureOverviewGUI {
         int seconds = Integer.parseInt(hoursMinutesSeconds[2]);
         newTimeObject = LocalTime.of(hours, minutes, seconds);
       }
+      // Set new time if it is after currentTime and remove all departures before.
       if (newTimeObject.isAfter(this.currentTime)) {
         this.currentTime = newTimeObject;
         this.clockLabel.setText(newTimeObject.toString());
+        this.overview.removeDeparturesBefore(this.currentTime);
       }
       else {
         throw new IllegalArgumentException("New time cannot be earlier than current time. ");

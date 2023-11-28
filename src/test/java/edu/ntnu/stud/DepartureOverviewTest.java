@@ -144,11 +144,11 @@ class DepartureOverviewTest {
   }
 
   /**
-   * Tests whether 'removeDeparturesAfter()' works by removing all departures except the
-   * earliest one, and checking whether it is in index 0 of the list of departures.
+   * Tests whether 'removeDeparturesBefore()' works by removing all departures except the
+   * latest one, and checking whether it is in index 0 of the list of departures.
    */
   @Test
-  void shouldRemoveDeparturesAfter() {
+  void shouldRemoveDeparturesBefore() {
     TrainDeparture td1 = new TrainDeparture("S1", 2,
         "Trondheim", LocalTime.of(12, 30));
     TrainDeparture td2 = new TrainDeparture("R2", 3,
@@ -158,18 +158,18 @@ class DepartureOverviewTest {
     this.departureOverview.registerDeparture(td1);
     this.departureOverview.registerDeparture(td2);
     this.departureOverview.registerDeparture(td3);
-    this.departureOverview.removeDeparturesAfter(LocalTime.of(11, 45));
+    this.departureOverview.removeDeparturesBefore(LocalTime.of(13, 55));
 
-    assertEquals(LocalTime.of(11, 25),
+    assertEquals(LocalTime.of(14, 0),
         this.departureOverview.getDeparture(0).getTime());
   }
 
   /**
    * Ensures that the overview doesn't contain departures with departure
-   * time after which all departures were to be removed.
+   * time before which all departures were to be removed.
    */
   @Test
-  void shouldNotRemoveDeparturesBefore() {
+  void shouldNotRemoveDeparturesAfter() {
     TrainDeparture td1 = new TrainDeparture("S1", 2,
         "Trondheim", LocalTime.of(12, 30));
     TrainDeparture td2 = new TrainDeparture("R2", 3,
@@ -179,10 +179,9 @@ class DepartureOverviewTest {
     this.departureOverview.registerDeparture(td1);
     this.departureOverview.registerDeparture(td2);
     this.departureOverview.registerDeparture(td3);
-    this.departureOverview.removeDeparturesAfter(LocalTime.of(11, 45));
-    assertFalse(this.departureOverview.getDepartures().contains(td2));
+    this.departureOverview.removeDeparturesBefore(LocalTime.of(13, 55));
     assertFalse(this.departureOverview.getDepartures().contains(td1));
-    assertFalse(this.departureOverview.getDepartures().contains(td2));
+    assertFalse(this.departureOverview.getDepartures().contains(td3));
   }
 
   /**

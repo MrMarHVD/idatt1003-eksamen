@@ -127,10 +127,10 @@ public class DepartureOverview {
    *
    * @param time the time after which all departures will be removed.
    */
-  public void removeDeparturesAfter(LocalTime time) {
+  public void removeDeparturesBefore(LocalTime time) {
 
     this.departures.removeIf(
-        departure -> departure.getTime().plusMinutes(departure.getDelay()).isAfter(time));
+        departure -> departure.getTime().plusMinutes(departure.getDelay()).isBefore(time));
   }
 
   /**
