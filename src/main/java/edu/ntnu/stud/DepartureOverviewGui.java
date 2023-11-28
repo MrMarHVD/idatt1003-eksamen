@@ -1,36 +1,28 @@
 package edu.ntnu.stud;
 
-import java.text.NumberFormat;
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Objects;
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.DateTimeException;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Objects;
+import javax.swing.*;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
 
 /**
- * This is a DepartureOverviewGUI class. It is used to establish the GUI element.
+ * This is a DepartureOverviewGUI class. It implements the user interface of the
+ * Train Dispatch application visually and performs the application logic relating to it.
  *
  * @author Håvard Daleng.
  * @version 1.0, 2023-10-16.
  */
-/*
-*/
-public class DepartureOverviewGUI {
+public class DepartureOverviewGui {
   /**
    * JFrame object represents the entirety of the interface.
    */
-  private JFrame frame; // Consider making some of these fields scoped to specific methods
+  private JFrame frame;
 
   /**
    * JTable object represents the table itself.
@@ -131,12 +123,11 @@ public class DepartureOverviewGUI {
    *
    * @param overview TrainDepartureOverview the GUI will keep track of.
    */
-  public DepartureOverviewGUI(DepartureOverview overview) {
+  public DepartureOverviewGui(DepartureOverview overview) {
 
     this.overview = overview;
 
     this.currentTime = LocalTime.of(12,0,0);
-
     this.initializeFrame();
     this.initializeTableModel();
     this.populateTable();
@@ -251,7 +242,7 @@ public class DepartureOverviewGUI {
     this.idField = new JTextField(5);
     this.registerButton = new JButton("Register");
 
-    this.removeButton = new JButton("Remove departure");
+    this.removeButton = new JButton("Cancel departure");
 
     // Group each label and text field in its own panel.
     JPanel linePanel = new JPanel();
@@ -436,12 +427,14 @@ public class DepartureOverviewGUI {
       status = "New time: " + departure.getTime().plusMinutes(departure.getDelay()).toString();
     }
 
+    // Check if departure is after current time and create object containing row data.
     if (departure.getTime().plusMinutes(departure.getDelay()).isAfter(this.currentTime)) {
       Object[] rowData = {
           departure.getTime(),
           departure.getLine(),
           departure.getTrainId(),
           departure.getDestination(),
+          // Status may be either a note about new departure time, or "cancelled"-status.
           status.equals("New time: " + departure.getTime().toString()) ? "" : status,
           departure.getTrack() == 0 || departure.getTrack() == -1 ? "" : departure.getTrack()
       };

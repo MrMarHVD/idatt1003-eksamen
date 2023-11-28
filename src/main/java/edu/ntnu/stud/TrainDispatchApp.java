@@ -66,7 +66,7 @@ public class TrainDispatchApp {
 
     SwingUtilities.invokeLater(new Runnable() {
       public void run() {
-        DepartureOverviewGUI GUI = new DepartureOverviewGUI(overview); // Create your GUI here
+        DepartureOverviewGui GUI = new DepartureOverviewGui(overview); // Create your GUI here
         GUI.start();
       }
     });

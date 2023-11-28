@@ -123,6 +123,17 @@ public class DepartureOverview {
   }
 
   /**
+   * Sort the list of departures by nominal departure time only using lambda expression.
+   */
+  public void sortDeparturesNoDelay() {
+    departures.sort((TrainDeparture o1, TrainDeparture o2) -> {
+      LocalTime newTime1 = o1.getTime();
+      LocalTime newTime2 = o2.getTime();
+      return newTime1.compareTo(newTime2);
+    });
+  }
+
+  /**
    * Removes all departures after a certain time.
    *
    * @param time the time after which all departures will be removed.

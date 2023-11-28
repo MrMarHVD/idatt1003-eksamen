@@ -116,7 +116,7 @@ class DepartureOverviewTest {
   }
 
   /**
-   * Tests whether 'sortDepartures()' work by adding departures in the wrong order,
+   * Tests whether 'sortDepartures()' work by adding departures in the wrong order, adding delay,
    * then sorting and checking whether time of departure is in ascending order.
    * Since departures are sorted after each registration, invoking the method directly here
    * is unnecessary.
@@ -129,6 +129,7 @@ class DepartureOverviewTest {
         "Ålesund", LocalTime.of(14, 0));
     TrainDeparture td3 = new TrainDeparture("L2", 4,
         "Gjøvik", LocalTime.of(11, 25));
+    td1.addDelay(10);
     this.departureOverview.registerDeparture(td1);
     this.departureOverview.registerDeparture(td2);
     this.departureOverview.registerDeparture(td3);
@@ -137,8 +138,9 @@ class DepartureOverviewTest {
         this.departureOverview.getDeparture(0).getTime());
     assertEquals(LocalTime.of(12, 0),
         this.departureOverview.getDeparture(1).getTime());
-    assertEquals(LocalTime.of(12, 30),
-        this.departureOverview.getDeparture(2).getTime());
+    assertEquals(LocalTime.of(12, 40),
+        this.departureOverview.getDeparture(2).getTime().
+            plusMinutes(this.departureOverview.getDeparture(2).getDelay()));
     assertEquals(LocalTime.of(14, 0),
         this.departureOverview.getDeparture(3).getTime());
   }
