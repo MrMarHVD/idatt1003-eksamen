@@ -184,7 +184,7 @@ public class DepartureOverviewGui {
 
     // Create a sub-panel for search components.
     JPanel searchPanel = new JPanel();
-    searchPanel.add(new JLabel("Train ID/Destination"));
+    searchPanel.add(new JLabel("Train ID/Destination:"));
     searchPanel.add(searchField);
     searchPanel.add(searchButton);
 

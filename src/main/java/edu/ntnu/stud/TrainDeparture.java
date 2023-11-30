@@ -163,6 +163,7 @@ public class TrainDeparture {
    * Cancel-method allowing the user to cancel this departure.
    */
   public void cancelDeparture() {
+    // Departure cannot be 'un-cancelled' as this would likely not occur in a practical situation.
     this.cancel = true;
   }
 

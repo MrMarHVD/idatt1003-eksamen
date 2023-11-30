@@ -2,7 +2,6 @@ package edu.ntnu.stud;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,10 +50,10 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldCauseExceptionWithDuplicateIds() {
-    TrainDeparture td1 = new TrainDeparture("L1", 1,
+    final TrainDeparture td1 = new TrainDeparture("L1", 1,
         "Oslo", LocalTime.of(12, 0));
-    TrainDeparture td2 = new TrainDeparture("R1", 1,
-        "Trondheim", LocalTime.of(13,0));
+    final TrainDeparture td2 = new TrainDeparture("R1", 1,
+        "Trondheim", LocalTime.of(13, 0));
 
     assertThrows(IllegalArgumentException.class, () -> {
       new DepartureOverview(td1, td2);
@@ -77,11 +76,11 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldGetDepartures() {
-    TrainDeparture td1 = new TrainDeparture("S1", 2,
+    final TrainDeparture td1 = new TrainDeparture("S1", 2,
         "Trondheim", LocalTime.of(12, 30));
-    TrainDeparture td2 = new TrainDeparture("R2", 3,
+    final TrainDeparture td2 = new TrainDeparture("R2", 3,
         "Ålesund", LocalTime.of(14, 0));
-    TrainDeparture td3 = new TrainDeparture("L2", 4,
+    final TrainDeparture td3 = new TrainDeparture("L2", 4,
         "Gjøvik", LocalTime.of(11, 25));
     this.departureOverview.registerDeparture(td1);
     this.departureOverview.registerDeparture(td2);
@@ -96,7 +95,7 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldRegisterDeparture() {
-    TrainDeparture td1 = new TrainDeparture("L2", 2,
+    final TrainDeparture td1 = new TrainDeparture("L2", 2,
         "Trondheim", LocalTime.of(12, 15, 0));
     this.departureOverview.registerDeparture(td1);
 
@@ -112,7 +111,8 @@ class DepartureOverviewTest {
   @Test
   void shouldNotAddNullDeparture() {
     assertThrows(IllegalArgumentException.class,
-        () -> {this.departureOverview.registerDeparture(null);});
+        () -> {
+        this.departureOverview.registerDeparture(null); });
   }
 
   /**
@@ -123,11 +123,11 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldSortDepartures() {
-    TrainDeparture td1 = new TrainDeparture("S1", 2,
+    final TrainDeparture td1 = new TrainDeparture("S1", 2,
         "Trondheim", LocalTime.of(12, 30));
-    TrainDeparture td2 = new TrainDeparture("R2", 3,
+    final TrainDeparture td2 = new TrainDeparture("R2", 3,
         "Ålesund", LocalTime.of(14, 0));
-    TrainDeparture td3 = new TrainDeparture("L2", 4,
+    final TrainDeparture td3 = new TrainDeparture("L2", 4,
         "Gjøvik", LocalTime.of(11, 25));
     td1.addDelay(10);
     this.departureOverview.registerDeparture(td1);
@@ -139,8 +139,8 @@ class DepartureOverviewTest {
     assertEquals(LocalTime.of(12, 0),
         this.departureOverview.getDeparture(1).getTime());
     assertEquals(LocalTime.of(12, 40),
-        this.departureOverview.getDeparture(2).getTime().
-            plusMinutes(this.departureOverview.getDeparture(2).getDelay()));
+        this.departureOverview.getDeparture(2).getTime()
+            .plusMinutes(this.departureOverview.getDeparture(2).getDelay()));
     assertEquals(LocalTime.of(14, 0),
         this.departureOverview.getDeparture(3).getTime());
   }
@@ -151,11 +151,11 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldRemoveDeparturesBefore() {
-    TrainDeparture td1 = new TrainDeparture("S1", 2,
+    final TrainDeparture td1 = new TrainDeparture("S1", 2,
         "Trondheim", LocalTime.of(12, 30));
-    TrainDeparture td2 = new TrainDeparture("R2", 3,
+    final TrainDeparture td2 = new TrainDeparture("R2", 3,
         "Ålesund", LocalTime.of(14, 0));
-    TrainDeparture td3 = new TrainDeparture("L2", 4,
+    final TrainDeparture td3 = new TrainDeparture("L2", 4,
         "Gjøvik", LocalTime.of(11, 25));
     this.departureOverview.registerDeparture(td1);
     this.departureOverview.registerDeparture(td2);
@@ -172,11 +172,11 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldNotRemoveDeparturesAfter() {
-    TrainDeparture td1 = new TrainDeparture("S1", 2,
+    final TrainDeparture td1 = new TrainDeparture("S1", 2,
         "Trondheim", LocalTime.of(12, 30));
-    TrainDeparture td2 = new TrainDeparture("R2", 3,
+    final TrainDeparture td2 = new TrainDeparture("R2", 3,
         "Ålesund", LocalTime.of(14, 0));
-    TrainDeparture td3 = new TrainDeparture("L2", 4,
+    final TrainDeparture td3 = new TrainDeparture("L2", 4,
         "Gjøvik", LocalTime.of(11, 25));
     this.departureOverview.registerDeparture(td1);
     this.departureOverview.registerDeparture(td2);
@@ -192,11 +192,11 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldFindDepartureWithRightId() {
-    TrainDeparture td1 = new TrainDeparture("S1", 2,
+    final TrainDeparture td1 = new TrainDeparture("S1", 2,
         "Trondheim", LocalTime.of(12, 30));
-    TrainDeparture td2 = new TrainDeparture("R2", 3,
+    final TrainDeparture td2 = new TrainDeparture("R2", 3,
         "Ålesund", LocalTime.of(14, 0));
-    TrainDeparture td3 = new TrainDeparture("L2", 4,
+    final TrainDeparture td3 = new TrainDeparture("L2", 4,
         "Gjøvik", LocalTime.of(11, 25));
     this.departureOverview.registerDeparture(td1);
     this.departureOverview.registerDeparture(td2);
@@ -212,11 +212,11 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldFindDepartureWithRightDestination() {
-    TrainDeparture td1 = new TrainDeparture("S1", 2,
+    final TrainDeparture td1 = new TrainDeparture("S1", 2,
         "Trondheim", LocalTime.of(12, 30));
-    TrainDeparture td2 = new TrainDeparture("R2", 3,
+    final TrainDeparture td2 = new TrainDeparture("R2", 3,
         "Ålesund", LocalTime.of(14, 0));
-    TrainDeparture td3 = new TrainDeparture("L2", 4,
+    final TrainDeparture td3 = new TrainDeparture("L2", 4,
         "Gjøvik", LocalTime.of(11, 25));
     this.departureOverview.registerDeparture(td1);
     this.departureOverview.registerDeparture(td2);

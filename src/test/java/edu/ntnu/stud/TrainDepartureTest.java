@@ -14,10 +14,11 @@ import org.junit.jupiter.api.Test;
  * @version 1.0, 2023-10-16.
  */
 class TrainDepartureTest {
-
   private TrainDeparture trainDeparture;
 
-
+  /**
+   * Create a departure before each test for mutator methods.
+   */
   @BeforeEach
   void setUp() {
     this.trainDeparture = new TrainDeparture("L1", 1,
@@ -73,4 +74,21 @@ class TrainDepartureTest {
     assertTrue(thrown.getMessage().contains("The delay entered is invalid."));
   }
 
+  /**
+   * Tests whether setting the track using 'setTrack()'-method works properly.
+   */
+  @Test
+  void shouldSetTrack() {
+    trainDeparture.setTrack(2);
+    assertEquals(2, trainDeparture.getTrack());
+  }
+
+  /**
+   * Tests whether using the 'cancelDeparture()'-method cancels the departure.
+   */
+  @Test
+  void shouldCancelDeparture() {
+    trainDeparture.cancelDeparture();
+    assertTrue(trainDeparture.getCancelStatus());
+  }
 }
