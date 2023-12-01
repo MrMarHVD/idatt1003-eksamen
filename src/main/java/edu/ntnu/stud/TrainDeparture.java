@@ -46,6 +46,9 @@ public class TrainDeparture {
    */
   private int delay;
 
+  /**
+   * Stores a boolean representing whether the departure is cancelled (true) or not (false).
+   */
   private boolean cancel;
 
   /**
@@ -179,5 +182,4 @@ public class TrainDeparture {
       this.delay += minutes;
     }
   }
-
 }
