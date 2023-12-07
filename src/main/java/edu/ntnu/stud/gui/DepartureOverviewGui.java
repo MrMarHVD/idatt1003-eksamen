@@ -1,5 +1,7 @@
-package edu.ntnu.stud;
+package edu.ntnu.stud.gui;
 
+import edu.ntnu.stud.backend.DepartureOverview;
+import edu.ntnu.stud.backend.TrainDeparture;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

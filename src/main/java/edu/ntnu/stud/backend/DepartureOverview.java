@@ -1,18 +1,7 @@
-
-/**
- * Represents an overview of train departures.
- *
- * @author Håvard Daleng
- * @version 1.0
- * @date 2023-10-16
- */
-
-package edu.ntnu.stud;
+package edu.ntnu.stud.backend;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;

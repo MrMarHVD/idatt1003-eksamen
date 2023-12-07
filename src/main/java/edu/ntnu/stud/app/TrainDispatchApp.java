@@ -1,5 +1,8 @@
-package edu.ntnu.stud;
+package edu.ntnu.stud.app;
 
+import edu.ntnu.stud.backend.DepartureOverview;
+import edu.ntnu.stud.backend.TrainDeparture;
+import edu.ntnu.stud.gui.DepartureOverviewGui;
 import java.time.LocalTime;
 import javax.swing.SwingUtilities;
 
@@ -20,7 +23,7 @@ public class TrainDispatchApp {
    */
   public static void main(String[] args) {
 
-    // Create some departures
+    // Create some test departures.
     TrainDeparture departure1 = new TrainDeparture("A1", 1,
         "Trondheim", LocalTime.of(12, 0));
     TrainDeparture departure2 = new TrainDeparture("L2", 2,
@@ -42,7 +45,7 @@ public class TrainDispatchApp {
     TrainDeparture departure10 = new TrainDeparture("A1", 10,
         "Trondheim", LocalTime.of(14, 0), 1);
 
-    // Initialise departure overview
+    // Initialise departure overview.
     DepartureOverview overview = new DepartureOverview(departure1, departure2, departure3,
         departure4, departure5, departure6, departure7, departure8, departure9, departure10);
 

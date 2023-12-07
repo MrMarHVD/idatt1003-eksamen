@@ -6,15 +6,20 @@ STUDENT ID = "Your ID"
 
 ## Project description
 
-[//]: # (TODO: Write a short description of your project/product here.)
+[//] # This is a train scheduling application. It allows the user to manage a set of
+train departures arriving at-and departing from a single train station. 
+It incorporates the ability to register new departures, add delay, change track, search
+and cancel among other functions.
 
 ## Project structure
 
-[//]: # (TODO: Describe the structure of your project here. How have you used packages in your structure. Where are all sourcefiles stored. Where are all JUnit-test classes stored. etc.)
+[//]: # All source files and tests are in the package edu.ntnu.stud. The main source files
+are in the file path src/main/java/edu/ntnu/stud. Tests are located in src/test/java/edu/ntnu/stud.
+
 
 ## Link to repository
 
-[//]: # (TODO: Include a link to your repository here.)
+[//]: # https://github.com/MrMarHVD/idatt1003-eksamen
 
 ## How to run the project
 

@@ -1,6 +1,6 @@
 
 
-package edu.ntnu.stud;
+package edu.ntnu.stud.backend;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;

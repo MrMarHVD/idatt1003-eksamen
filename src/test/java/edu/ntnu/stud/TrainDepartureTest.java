@@ -2,6 +2,7 @@ package edu.ntnu.stud;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import edu.ntnu.stud.backend.TrainDeparture;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
