@@ -666,10 +666,9 @@ public class DepartureOverviewGui {
           this.tableModel.getValueAt(selectedRow, 2));
       try {
         current.addDelay(delayInt);
-      }
-      catch (IllegalArgumentException e) {
+      } catch (IllegalArgumentException e) {
         JOptionPane.showMessageDialog(this.frame, "Invalid delay input: " + e.getMessage(),
-        "Input error", JOptionPane.ERROR_MESSAGE);
+            "Input error", JOptionPane.ERROR_MESSAGE);
       }
 
     } else {
@@ -696,8 +695,7 @@ public class DepartureOverviewGui {
       try {
         // Try to set selected departure's track.
         current.setTrack(trackInt);
-      }
-      catch (IllegalArgumentException e) {
+      } catch (IllegalArgumentException e) {
         JOptionPane.showMessageDialog(this.frame, "Invalid track input: " + e.getMessage(),
             "Input error.", JOptionPane.ERROR_MESSAGE);
         return;

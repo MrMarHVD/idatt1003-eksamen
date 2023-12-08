@@ -162,8 +162,7 @@ public class TrainDeparture {
 
     if (track > 0) {
       this.track = track;
-    }
-    else {
+    } else {
       throw new IllegalArgumentException("The track entered is less than 1.");
     }
   }
