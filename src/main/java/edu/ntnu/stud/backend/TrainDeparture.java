@@ -158,8 +158,14 @@ public class TrainDeparture {
    *
    * @param track new track.
    */
-  public void setTrack(int track) {
-    this.track = track;
+  public void setTrack(int track) throws NumberFormatException {
+
+    if (track > 0) {
+      this.track = track;
+    }
+    else {
+      throw new IllegalArgumentException("The track entered is less than 1.");
+    }
   }
 
   /**

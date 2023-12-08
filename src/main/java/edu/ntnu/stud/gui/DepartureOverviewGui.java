@@ -664,7 +664,14 @@ public class DepartureOverviewGui {
     if (selectedRow != -1) {
       TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
-      current.addDelay(delayInt);
+      try {
+        current.addDelay(delayInt);
+      }
+      catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this.frame, "Invalid delay input: " + e.getMessage(),
+        "Input error", JOptionPane.ERROR_MESSAGE);
+      }
+
     } else {
       JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
@@ -686,7 +693,15 @@ public class DepartureOverviewGui {
     if (selectedRow != -1) {
       TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
-      current.setTrack(trackInt);
+      try {
+        // Try to set selected departure's track.
+        current.setTrack(trackInt);
+      }
+      catch (IllegalArgumentException e) {
+        JOptionPane.showMessageDialog(this.frame, "Invalid track input: " + e.getMessage(),
+            "Input error.", JOptionPane.ERROR_MESSAGE);
+        return;
+      }
     } else {
       JOptionPane.showMessageDialog(this.frame, "No departure has been selected.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
