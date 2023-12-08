@@ -14,7 +14,11 @@ and cancel among other functions.
 ## Project structure
 
 [//]: # All source files and tests are in the package edu.ntnu.stud. The main source files
-are in the file path src/main/java/edu/ntnu/stud. Tests are located in src/test/java/edu/ntnu/stud.
+are in the file path src/main/java/edu/ntnu/stud. The main class is under the
+app-subdirectory, backend (TrainDeparture and DepartureOverview) are under backend,
+and the GUI-class (DepartureOverviewGui) is under gui.
+
+Tests are located in src/test/java/edu/ntnu/stud.
 
 
 ## Link to repository
@@ -23,7 +27,20 @@ are in the file path src/main/java/edu/ntnu/stud. Tests are located in src/test/
 
 ## How to run the project
 
-[//]: # (TODO: Describe how to run your project here. What is the main class? What is the main method?
+[//]: # The main class of the program is TrainDispatchApp.java and is found under
+src/main/java/edu/ntnu/stud/app.
+
+When running the program, it is expected that a separate window will open. This is the Java
+Swing interface. It should show a table already populated by ten train departures initialized
+prior to the user interface. A number of text fields and buttons should be present, all of which
+are labelled according to their purpose. 
+
+Upon adding departures or changing the attributes of existing departures, the table should 
+immediately update on its own, showing only those departures departing after current time
+(top left of the interface). In the case of exceptions, the user is notified and informed
+of their cause in a second pop-up window. It is not necessary to restart the application
+upon exceptions.
+
 What is the input and output of the program? What is the expected behaviour of the program?)
 
 ## How to run the tests

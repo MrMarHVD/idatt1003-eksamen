@@ -1,4 +1,4 @@
-package edu.ntnu.stud;
+package edu.ntnu.stud.backend;
 
 import static org.junit.jupiter.api.Assertions.*;
 
