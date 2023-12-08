@@ -15,6 +15,10 @@ import org.junit.jupiter.api.Test;
  * @version 1.0, 2023-10-16.
  */
 class TrainDepartureTest {
+
+  /**
+   * TrainDeparture-field for convenience in testing delay, track and cancel methods.
+   */
   private TrainDeparture trainDeparture;
 
   /**
@@ -35,6 +39,7 @@ class TrainDepartureTest {
     TrainDeparture trainDeparture = new TrainDeparture("L1", 1,
         "Oslo", LocalTime.of(12, 0), 1);
 
+    // Ensure departure fields are correct.
     Assertions.assertEquals("L1", trainDeparture.getLine());
     Assertions.assertEquals(1, trainDeparture.getTrainId());
     Assertions.assertEquals("Oslo", trainDeparture.getDestination());
@@ -47,6 +52,7 @@ class TrainDepartureTest {
   @Test
   void shouldAddDelay() {
     trainDeparture.addDelay(5);
+
     Assertions.assertEquals(5, trainDeparture.getDelay());
   }
 
@@ -57,6 +63,7 @@ class TrainDepartureTest {
   void shouldAddMultipleDelays() {
     trainDeparture.addDelay(5);
     trainDeparture.addDelay(9);
+
     Assertions.assertEquals(14, trainDeparture.getDelay());
   }
 
@@ -81,6 +88,7 @@ class TrainDepartureTest {
   @Test
   void shouldSetTrack() {
     trainDeparture.setTrack(2);
+
     assertEquals(2, trainDeparture.getTrack());
   }
 
@@ -90,6 +98,7 @@ class TrainDepartureTest {
   @Test
   void shouldCancelDeparture() {
     trainDeparture.cancelDeparture();
+
     assertTrue(trainDeparture.getCancelStatus());
   }
 }

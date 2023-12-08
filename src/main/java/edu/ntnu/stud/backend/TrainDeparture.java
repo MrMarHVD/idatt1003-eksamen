@@ -181,7 +181,8 @@ public class TrainDeparture {
    * @param minutes number of minutes delayed.
    */
   public void addDelay(int minutes) {
-    if (this.getDelay() + minutes <= 0) {
+    if (minutes <= 0) {
+      // Throw exception if delay input is negative.
       throw new IllegalArgumentException("The delay entered is invalid.");
     } else {
       this.delay += minutes;

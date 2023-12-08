@@ -32,6 +32,7 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldCreateOverview() {
+    // Create new overview.
     DepartureOverview overview = new DepartureOverview(
         new TrainDeparture("L1", 1,
             "Oslo", LocalTime.of(12, 0)),
@@ -40,6 +41,7 @@ class DepartureOverviewTest {
         new TrainDeparture("S3", 3,
             "Ålesund", LocalTime.of(13, 0)));
 
+    // Test some departure parameters to ensure they're correct.
     Assertions.assertEquals("L1", overview.getDeparture(0).getLine());
     Assertions.assertEquals("Trondheim", overview.getDeparture(1).getDestination());
     Assertions.assertEquals(LocalTime.of(13, 0),
@@ -63,7 +65,7 @@ class DepartureOverviewTest {
   }
 
   /**
-   * Tests whether 'getDeparture()' works by comparing the trainID of a TrainDeparture
+   * Tests whether 'getDeparture()' works by ensuring the trainID of a TrainDeparture
    * in the overview is equal to what it was registered with.
    */
   @Test
@@ -88,6 +90,7 @@ class DepartureOverviewTest {
     this.departureOverview.registerDeparture(td2);
     this.departureOverview.registerDeparture(td3);
 
+    // Check whether size of ArrayList is correct.
     assertEquals(4, this.departureOverview.getDepartures().size());
   }
 
@@ -101,6 +104,7 @@ class DepartureOverviewTest {
         "Trondheim", LocalTime.of(12, 15, 0));
     this.departureOverview.registerDeparture(td1);
 
+    // Compare some values to ensure they're correct.
     assertEquals(2, this.departureOverview.getDeparture(1).getTrainId());
     assertEquals("L2", this.departureOverview.getDeparture(1).getLine());
     assertEquals(LocalTime.of(12, 15),
@@ -112,6 +116,8 @@ class DepartureOverviewTest {
    */
   @Test
   void shouldNotAddNullDeparture() {
+
+    // Use lambda expression to test whether adding null departure yields error.
     assertThrows(IllegalArgumentException.class,
         () -> {
         this.departureOverview.registerDeparture(null); });
@@ -136,6 +142,7 @@ class DepartureOverviewTest {
     this.departureOverview.registerDeparture(td2);
     this.departureOverview.registerDeparture(td3);
 
+    // Ensure departure times are in ascending order.
     assertEquals(LocalTime.of(11, 25),
         this.departureOverview.getDeparture(0).getTime());
     assertEquals(LocalTime.of(12, 0),
@@ -169,8 +176,8 @@ class DepartureOverviewTest {
   }
 
   /**
-   * Ensures that the overview doesn't contain departures with departure
-   * time before which all departures were to be removed.
+   * Ensures that the removeDeparturesBefore doesn't remove departures
+   * after provided time.
    */
   @Test
   void shouldNotRemoveDeparturesAfter() {
@@ -184,8 +191,8 @@ class DepartureOverviewTest {
     this.departureOverview.registerDeparture(td2);
     this.departureOverview.registerDeparture(td3);
     this.departureOverview.removeDeparturesBefore(LocalTime.of(13, 55));
-    assertFalse(this.departureOverview.getDepartures().contains(td1));
-    assertFalse(this.departureOverview.getDepartures().contains(td3));
+
+    assertTrue(this.departureOverview.getDepartures().contains(td2));
   }
 
   /**

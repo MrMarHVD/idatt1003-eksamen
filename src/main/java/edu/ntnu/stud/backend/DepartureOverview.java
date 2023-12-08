@@ -104,6 +104,8 @@ public class DepartureOverview {
    */
   public void sortDepartures() {
 
+    // Use lambda expression to sort departures conveniently, as the Comparable-object
+    // the sort-method receives can be represented using a lambda expression.
     departures.sort((TrainDeparture o1, TrainDeparture o2) -> {
       LocalTime newTime1 = o1.getTime().plusMinutes(o1.getDelay());
       LocalTime newTime2 = o2.getTime().plusMinutes(o2.getDelay());
@@ -129,12 +131,14 @@ public class DepartureOverview {
    */
   public void removeDeparturesBefore(LocalTime time) {
 
+    // Use lambda expression to check which departures precede input time.
     this.departures.removeIf(
         departure -> departure.getTime().plusMinutes(departure.getDelay()).isBefore(time));
   }
 
   /**
    * Searches the overview for a departure with a specific ID.
+   * Returns void if no departure is found.
    *
    * @param input ID to search with.
    * @return TrainDeparture with ID in question, if any.
@@ -152,6 +156,7 @@ public class DepartureOverview {
 
   /**
    * Searches the overview for departures headed to specific destination.
+   * Returns empty list if no departures are found.
    *
    * @param inputDestination destination to search for.
    * @return list of departures due for destination entered.

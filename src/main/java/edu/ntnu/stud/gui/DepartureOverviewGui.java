@@ -129,6 +129,7 @@ public class DepartureOverviewGui {
 
     this.overview = overview;
 
+    // Initialize various components and processes.
     this.currentTime = LocalTime.of(12, 0, 0);
     this.initializeFrame();
     this.initializeTableModel();
@@ -142,7 +143,6 @@ public class DepartureOverviewGui {
     this.setupTrackActionListener();
     this.setupCancelActionListener();
     this.initializeScrollPane();
-    this.setLookAndFeel();
   }
 
   /**
@@ -243,7 +243,6 @@ public class DepartureOverviewGui {
     this.timeField = new JTextField(5);
     this.idField = new JTextField(5);
     this.registerButton = new JButton("Register");
-
     this.removeButton = new JButton("Cancel departure");
 
     // Group each label and text field in its own panel.
@@ -289,7 +288,7 @@ public class DepartureOverviewGui {
     delayTrackPanel.add(this.trackField);
     delayTrackPanel.add(this.trackButton);
 
-    // Add the two sub-panels to the main panel.
+    // Add the three sub-panels to the main panel.
     lowerPanel.add(registerPanel);
     lowerPanel.add(delayTrackPanel);
     lowerPanel.add(removePanel);
@@ -308,22 +307,6 @@ public class DepartureOverviewGui {
   private void initializeScrollPane() {
     JScrollPane scrollPane = new JScrollPane(table);
     frame.add(scrollPane, BorderLayout.CENTER);
-  }
-
-  /**
-   * Sets the look and feel of the GUI to 'Nimbus' for better aesthetics.
-   */
-  private void setLookAndFeel() {
-    try {
-      for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-        if ("Nimbus".equals(info.getName())) {
-          UIManager.setLookAndFeel(info.getClassName());
-          break;
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   /**
@@ -403,7 +386,7 @@ public class DepartureOverviewGui {
    * Set up ActionListener for removing tracks.
    */
   private void setupCancelActionListener() {
-    // ActionListener object checks for
+    // ActionListener object detects when 'cancel'-button is clicked.
     this.removeButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
@@ -465,6 +448,7 @@ public class DepartureOverviewGui {
     tableModel.setRowCount(0);
     int inputId;
 
+    // If input is not an empty string, try to parse to int (ID), assume destination otherwise.
     if (!Objects.equals(input, "")) {
       try {
         inputId = Integer.parseInt(input);
@@ -526,6 +510,7 @@ public class DepartureOverviewGui {
         throw new IllegalArgumentException("Did you remember "
             + "colon between hours and minutes/seconds?");
       }
+      // Proceed according to which of the two valid formats the input is in.
       if (hoursMinutesSeconds.length == 2) {
         int hours = Integer.parseInt(hoursMinutesSeconds[0]);
         int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
@@ -546,6 +531,7 @@ public class DepartureOverviewGui {
       }
       this.populateTable();
 
+      // Catch various possible exceptions.
     } catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time format.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
@@ -574,7 +560,7 @@ public class DepartureOverviewGui {
     LocalTime newTimeObject = null;
     int newTrainIdObject = 0;
 
-    // Ensure a train line has been provided before proceeding.
+    // Ensure a train line has been provided before proceeding, stop running method otherwise.
     try {
       if (Objects.equals(newLine, "")) {
         throw new IllegalArgumentException("No line provided.");
@@ -585,7 +571,7 @@ public class DepartureOverviewGui {
       return;
     }
 
-    // Ensure a destination has been provided before proceeding.
+    // Ensure a destination has been provided before proceeding, stop running method otherwise.
     try {
       if (Objects.equals(newDestination, "")) {
         throw new IllegalArgumentException("No destination provided. ");
@@ -602,6 +588,8 @@ public class DepartureOverviewGui {
     try {
       if (hoursMinutesSeconds.length < 2 || hoursMinutesSeconds.length > 3) {
         throw new IllegalArgumentException("Invalid time format.");
+
+        // Proceed according to which of the two valid formats the input is in.
       } else if (hoursMinutesSeconds.length == 2) {
         int hours = Integer.parseInt(hoursMinutesSeconds[0]);
         int minutes = Integer.parseInt(hoursMinutesSeconds[1]);
@@ -612,6 +600,8 @@ public class DepartureOverviewGui {
         int seconds = Integer.parseInt(hoursMinutesSeconds[2]);
         newTimeObject = LocalTime.of(hours, minutes, seconds);
       }
+
+      // Catch various possible exceptions.
     } catch (NumberFormatException e) {
       JOptionPane.showMessageDialog(this.frame, "Invalid time format.",
           "Input error.", JOptionPane.ERROR_MESSAGE);
@@ -661,9 +651,12 @@ public class DepartureOverviewGui {
     // Finds the TrainDeparture object for which the current row is displaying data.
     int selectedRow = this.table.getSelectedRow();
 
+    // If a row is selected, obtain that row's train departure.
     if (selectedRow != -1) {
       TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
+
+      // Add delay if valid and display error otherwise.
       try {
         current.addDelay(delayInt);
       } catch (IllegalArgumentException e) {
@@ -714,6 +707,7 @@ public class DepartureOverviewGui {
   private void cancelDeparture() {
     int selectedRow = this.table.getSelectedRow();
 
+    // Obtain departure and cancel if the user has selected a row.
     if (selectedRow != -1) {
       TrainDeparture current = this.overview.searchById((int)
           this.tableModel.getValueAt(selectedRow, 2));
